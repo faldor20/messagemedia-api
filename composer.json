@@ -1,0 +1,30 @@
+{
+    "name": "schoolzine/messagemedia-api",
+    "version": "1.0.0",
+    "autoload": {
+        "psr-4": {
+            "Schoolzine\\MessagemediaApi\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "faldor20",
+            "email": "eli.jambu@gmail.com"
+        }
+    ],
+    "require": {
+        "psr/http-client": "^1.0.3",
+        "psr/http-message": "^1.1",
+        "psr/http-factory": "^1.1"
+    },
+    "require-dev": {
+        "guzzlehttp/guzzle": "^7.10",
+        "nyholm/psr7": "^1.8.2",
+        "phpstan/phpstan": "^2.1"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    }
+}

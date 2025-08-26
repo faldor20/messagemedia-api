@@ -1,0 +1,19 @@
+<?php
+
+namespace Schoolzine\MessagemediaApi\Model;
+
+/**
+ * A response to adding one or more numbers to your blacklist.
+ */
+class AddOneOrMoreNumbersToYourBlacklistResponse
+{
+    /**
+     * @var string|null
+     */
+    public ?string $uri = null;
+
+    /**
+     * @var string[]
+     */
+    public array $numbers = [];
+}

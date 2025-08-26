@@ -1,0 +1,12 @@
+<?php
+
+namespace Schoolzine\MessagemediaApi\Model;
+
+/**
+ * A request to add one or more numbers to your blacklist.
+ */
+class AddOneOrMoreNumbersToYourBlacklistRequest
+{
+    /** @var string[] */
+    public array $numbers = [];
+}
