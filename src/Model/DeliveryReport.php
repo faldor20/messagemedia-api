@@ -2,8 +2,6 @@
 
 namespace Schoolzine\MessagemediaApi\Model;
 
-use Schoolzine\MessagemediaApi\Enum\Status;
-
 /**
  * A delivery report for a message.
  */
@@ -30,9 +28,9 @@ class DeliveryReport
     public ?string $dateReceived = null;
 
     /**
-     * @var Status|null The status of the message.
+     * @var string|null The status of the message.
      */
-    public ?Status $status = null;
+    public ?string $status = null;
 
     /**
      * @var int|null Deprecated, no longer in use.

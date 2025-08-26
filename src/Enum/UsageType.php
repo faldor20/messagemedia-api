@@ -5,20 +5,20 @@ namespace Schoolzine\MessagemediaApi\Enum;
 /**
  * The usage type of the Sender ID.
  */
-enum UsageType: string
+class UsageType extends AbstractEnum
 {
     /**
      * Alphanumeric sender ID.
      */
-    case ALPHANUMERIC = 'ALPHANUMERIC';
+    public const ALPHANUMERIC = 'ALPHANUMERIC';
 
     /**
      * Own number sender ID.
      */
-    case OWN_NUMBER = 'OWN_NUMBER';
+    public const OWN_NUMBER = 'OWN_NUMBER';
 
     /**
      * Dedicated number sender ID.
      */
-    case DEDICATED = 'DEDICATED';
+    public const DEDICATED = 'DEDICATED';
 }

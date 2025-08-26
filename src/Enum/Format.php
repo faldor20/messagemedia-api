@@ -5,20 +5,20 @@ namespace Schoolzine\MessagemediaApi\Enum;
 /**
  * The format of the message.
  */
-enum Format: string
+class Format extends AbstractEnum
 {
     /**
      * SMS message.
      */
-    case SMS = 'SMS';
+    public const SMS = 'SMS';
 
     /**
      * MMS message.
      */
-    case MMS = 'MMS';
+    public const MMS = 'MMS';
 
     /**
      * Text to speech message.
      */
-    case TTS = 'TTS';
+    public const TTS = 'TTS';
 }

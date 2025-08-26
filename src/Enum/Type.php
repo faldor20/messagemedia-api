@@ -5,25 +5,25 @@ namespace Schoolzine\MessagemediaApi\Enum;
 /**
  * The type of a dedicated number.
  */
-enum Type: string
+class Type extends AbstractEnum
 {
     /**
      * Mobile number.
      */
-    case MOBILE = 'MOBILE';
+    public const MOBILE = 'MOBILE';
 
     /**
      * Landline number.
      */
-    case LANDLINE = 'LANDLINE';
+    public const LANDLINE = 'LANDLINE';
 
     /**
      * Toll-free number.
      */
-    case TOLL_FREE = 'TOLL_FREE';
+    public const TOLL_FREE = 'TOLL_FREE';
 
     /**
      * Short code number.
      */
-    case SHORT_CODE = 'SHORT_CODE';
+    public const SHORT_CODE = 'SHORT_CODE';
 }

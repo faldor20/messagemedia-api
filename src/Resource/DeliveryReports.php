@@ -3,9 +3,9 @@
 namespace Schoolzine\MessagemediaApi\Resource;
 
 use Schoolzine\MessagemediaApi\Client;
-use Schoolzine\MessagemediaApi\Enum\Status;
 use Schoolzine\MessagemediaApi\Model\CheckDeliveryReportsResponse;
 use Schoolzine\MessagemediaApi\Model\DeliveryReport;
+use Schoolzine\MessagemediaApi\Enum\Status;
 
 use Schoolzine\MessagemediaApi\Model\ConfirmDeliveryReportsAsReceivedRequest;
 

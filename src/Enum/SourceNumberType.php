@@ -5,20 +5,20 @@ namespace Schoolzine\MessagemediaApi\Enum;
 /**
  * Type of source address specified.
  */
-enum SourceNumberType: string
+class SourceNumberType extends AbstractEnum
 {
     /**
      * An international number.
      */
-    case INTERNATIONAL = 'INTERNATIONAL';
+    public const INTERNATIONAL = 'INTERNATIONAL';
 
     /**
      * An alphanumeric sender ID.
      */
-    case ALPHANUMERIC = 'ALPHANUMERIC';
+    public const ALPHANUMERIC = 'ALPHANUMERIC';
 
     /**
      * A short code.
      */
-    case SHORTCODE = 'SHORTCODE';
+    public const SHORTCODE = 'SHORTCODE';
 }

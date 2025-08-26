@@ -5,20 +5,20 @@ namespace Schoolzine\MessagemediaApi\Enum;
 /**
  * The capability of a dedicated number.
  */
-enum Capability: string
+class Capability extends AbstractEnum
 {
     /**
      * SMS capability.
      */
-    case SMS = 'SMS';
+    public const SMS = 'SMS';
 
     /**
      * TTS capability.
      */
-    case TTS = 'TTS';
+    public const TTS = 'TTS';
 
     /**
      * MMS capability.
      */
-    case MMS = 'MMS';
+    public const MMS = 'MMS';
 }

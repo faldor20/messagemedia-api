@@ -5,15 +5,15 @@ namespace Schoolzine\MessagemediaApi\Enum;
 /**
  * The expiry status of a sender address.
  */
-enum ExpiryStatus: string
+class ExpiryStatus extends AbstractEnum
 {
     /**
      * The sender address has expired.
      */
-    case EXPIRED = 'EXPIRED';
+    public const EXPIRED = 'EXPIRED';
 
     /**
      * The sender address is expiring soon.
      */
-    case EXPIRING = 'EXPIRING';
+    public const EXPIRING = 'EXPIRING';
 }

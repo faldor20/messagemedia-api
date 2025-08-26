@@ -5,15 +5,15 @@ namespace Schoolzine\MessagemediaApi\Enum;
 /**
  * The type of sender address.
  */
-enum SenderAddressType: string
+class SenderAddressType extends AbstractEnum
 {
     /**
      * An alphanumeric sender ID.
      */
-    case ALPHANUMERIC = 'ALPHANUMERIC';
+    public const ALPHANUMERIC = 'ALPHANUMERIC';
 
     /**
      * An international number.
      */
-    case INTERNATIONAL = 'INTERNATIONAL';
+    public const INTERNATIONAL = 'INTERNATIONAL';
 }

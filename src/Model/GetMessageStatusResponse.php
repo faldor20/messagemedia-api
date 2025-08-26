@@ -2,19 +2,15 @@
 
 namespace Schoolzine\MessagemediaApi\Model;
 
-use Schoolzine\MessagemediaApi\Enum\Format;
-use Schoolzine\MessagemediaApi\Enum\SourceNumberType;
-use Schoolzine\MessagemediaApi\Enum\Status;
-
 /**
  * The status of a message.
  */
 class GetMessageStatusResponse
 {
     /**
-     * @var Format|null The format of the message.
+     * @var string|null The format of the message.
      */
-    public ?Format $format = null;
+    public ?string $format = null;
 
     /**
      * @var string|null Content of the message.
@@ -57,9 +53,9 @@ class GetMessageStatusResponse
     public ?string $sourceNumber = null;
 
     /**
-     * @var SourceNumberType|null Type of source address specified.
+     * @var string|null Type of source address specified.
      */
-    public ?SourceNumberType $sourceNumberType = null;
+    public ?string $sourceNumberType = null;
 
     /**
      * @var string|null Date time after which the message expires and will not be sent.
@@ -67,7 +63,7 @@ class GetMessageStatusResponse
     public ?string $messageExpiryTimestamp = null;
 
     /**
-     * @var Status|null The status of the message.
+     * @var string|null The status of the message.
      */
-    public ?Status $status = null;
+    public ?string $status = null;
 }

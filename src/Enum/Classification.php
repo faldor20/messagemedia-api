@@ -5,20 +5,20 @@ namespace Schoolzine\MessagemediaApi\Enum;
 /**
  * The classification of a dedicated number.
  */
-enum Classification: string
+class Classification extends AbstractEnum
 {
     /**
      * Bronze classification.
      */
-    case BRONZE = 'BRONZE';
+    public const BRONZE = 'BRONZE';
 
     /**
      * Silver classification.
      */
-    case SILVER = 'SILVER';
+    public const SILVER = 'SILVER';
 
     /**
      * Gold classification.
      */
-    case GOLD = 'GOLD';
+    public const GOLD = 'GOLD';
 }
