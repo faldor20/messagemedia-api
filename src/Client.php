@@ -2,6 +2,8 @@
 
 namespace Schoolzine\MessagemediaApi;
 
+use Http\Discovery\Psr17FactoryDiscovery;
+use Http\Discovery\Psr18ClientDiscovery;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
@@ -24,21 +26,24 @@ class Client
     /**
      * Client constructor.
      *
-     * @param ClientInterface $httpClient The HTTP client to use for sending requests.
      * @param Authentication $authentication The authentication method to use.
-     * @param RequestFactoryInterface $requestFactory A factory for creating requests.
-     * @param StreamFactoryInterface $streamFactory A factory for creating streams.
+     * @param ClientInterface|null $httpClient The HTTP client to use for sending requests.
+     *                                         If null, will be discovered automatically.
+     * @param RequestFactoryInterface|null $requestFactory A factory for creating requests.
+     *                                                     If null, will be discovered automatically.
+     * @param StreamFactoryInterface|null $streamFactory A factory for creating streams.
+     *                                                   If null, will be discovered automatically.
      */
     public function __construct(
-        ClientInterface $httpClient,
         Authentication $authentication,
-        RequestFactoryInterface $requestFactory,
-        StreamFactoryInterface $streamFactory
+        ClientInterface $httpClient = null,
+        RequestFactoryInterface $requestFactory = null,
+        StreamFactoryInterface $streamFactory = null
     ) {
-        $this->httpClient = $httpClient;
         $this->authentication = $authentication;
-        $this->requestFactory = $requestFactory;
-        $this->streamFactory = $streamFactory;
+        $this->httpClient = $httpClient ?? $this->discoverHttpClient();
+        $this->requestFactory = $requestFactory ?? $this->discoverRequestFactory();
+        $this->streamFactory = $streamFactory ?? $this->discoverStreamFactory();
     }
 
     /**
@@ -131,5 +136,35 @@ class Client
     public function dedicatedNumbers(): Resource\DedicatedNumbers
     {
         return new Resource\DedicatedNumbers($this);
+    }
+
+    /**
+     * Discovers an HTTP client implementation.
+     *
+     * @return ClientInterface
+     */
+    private function discoverHttpClient(): ClientInterface
+    {
+        return Psr18ClientDiscovery::find();
+    }
+
+    /**
+     * Discovers a request factory implementation.
+     *
+     * @return RequestFactoryInterface
+     */
+    private function discoverRequestFactory(): RequestFactoryInterface
+    {
+        return Psr17FactoryDiscovery::findRequestFactory();
+    }
+
+    /**
+     * Discovers a stream factory implementation.
+     *
+     * @return StreamFactoryInterface
+     */
+    private function discoverStreamFactory(): StreamFactoryInterface
+    {
+        return Psr17FactoryDiscovery::findStreamFactory();
     }
 }

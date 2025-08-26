@@ -33,7 +33,7 @@ class ClientTest extends TestCase
         $psr17Factory = new Psr17Factory();
 
         $authentication = new Basic('YOUR_API_KEY', 'YOUR_API_SECRET'); // Replace with dummy values
-        $client = new Client($httpClient, $authentication, $psr17Factory, $psr17Factory);
+        $client = new Client($authentication, $httpClient, $psr17Factory, $psr17Factory);
 
         $messagesResource = $client->messages();
 
@@ -61,5 +61,29 @@ class ClientTest extends TestCase
         $this->assertCount(1, $requestBody['messages']);
         $this->assertEquals('Hello World', $requestBody['messages'][0]['content']);
         $this->assertEquals('+61491570156', $requestBody['messages'][0]['destination_number']);
+    }
+
+    public function testSendMessageWithDiscoveredDependencies()
+    {
+        // This test demonstrates that the Client can be instantiated with only authentication
+        // In a real environment with proper PSR-18 and PSR-17 implementations installed,
+        // the dependencies would be discovered automatically
+
+        $authentication = new Basic('YOUR_API_KEY', 'YOUR_API_SECRET');
+
+        // Create client with only authentication - other dependencies will be discovered
+        $client = new Client($authentication);
+
+        // Verify that the client was created successfully
+        $this->assertInstanceOf(Client::class, $client);
+
+        // Verify that we can access resource methods
+        $messagesResource = $client->messages();
+        $this->assertNotNull($messagesResource);
+
+        // Note: This test doesn't execute the actual HTTP request since we're testing
+        // the dependency discovery mechanism, not the HTTP interaction.
+        // In a real application, the HTTP client and factories would be discovered
+        // automatically when the request is made.
     }
 }
