@@ -1,14 +1,14 @@
 <?php
 
-namespace Schoolzine\MessagemediaApi\Resource;
+namespace Faldor20\MessagemediaApi\Resource;
 
-use Schoolzine\MessagemediaApi\Client;
-use Schoolzine\MessagemediaApi\Model\GetNumberAuthorisationBlacklistResponse;
+use Faldor20\MessagemediaApi\Client;
+use Faldor20\MessagemediaApi\Model\GetNumberAuthorisationBlacklistResponse;
 
-use Schoolzine\MessagemediaApi\Model\CheckIfOneOrSeveralNumbersAreCurrentlyBlacklistedResponse;
-use Schoolzine\MessagemediaApi\Model\Number;
-use Schoolzine\MessagemediaApi\Model\AddOneOrMoreNumbersToYourBlacklistRequest;
-use Schoolzine\MessagemediaApi\Model\AddOneOrMoreNumbersToYourBlacklistResponse;
+use Faldor20\MessagemediaApi\Model\CheckIfOneOrSeveralNumbersAreCurrentlyBlacklistedResponse;
+use Faldor20\MessagemediaApi\Model\Number;
+use Faldor20\MessagemediaApi\Model\AddOneOrMoreNumbersToYourBlacklistRequest;
+use Faldor20\MessagemediaApi\Model\AddOneOrMoreNumbersToYourBlacklistResponse;
 
 /**
  * The Number Authorisation API allows you to manage your blacklists.

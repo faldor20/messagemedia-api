@@ -1,15 +1,15 @@
 <?php
 
-namespace Schoolzine\MessagemediaApi\Resource;
+namespace Faldor20\MessagemediaApi\Resource;
 
-use Schoolzine\MessagemediaApi\Client;
-use Schoolzine\MessagemediaApi\Enum\Format;
-use Schoolzine\MessagemediaApi\Enum\SourceNumberType;
-use Schoolzine\MessagemediaApi\Enum\Status;
-use Schoolzine\MessagemediaApi\Model\CancelScheduledMessageRequest;
-use Schoolzine\MessagemediaApi\Model\GetMessageStatusResponse;
-use Schoolzine\MessagemediaApi\Model\SendMessagesRequest;
-use Schoolzine\MessagemediaApi\Model\SendMessagesResponse;
+use Faldor20\MessagemediaApi\Client;
+use Faldor20\MessagemediaApi\Enum\Format;
+use Faldor20\MessagemediaApi\Enum\SourceNumberType;
+use Faldor20\MessagemediaApi\Enum\Status;
+use Faldor20\MessagemediaApi\Model\CancelScheduledMessageRequest;
+use Faldor20\MessagemediaApi\Model\GetMessageStatusResponse;
+use Faldor20\MessagemediaApi\Model\SendMessagesRequest;
+use Faldor20\MessagemediaApi\Model\SendMessagesResponse;
 
 /**
  * The Messages API provides a number of endpoints for building powerful two-way messaging applications.

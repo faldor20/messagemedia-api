@@ -1,6 +1,6 @@
 <?php
 
-namespace Schoolzine\MessagemediaApi;
+namespace Faldor20\MessagemediaApi;
 
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
@@ -9,7 +9,7 @@ use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use Schoolzine\MessagemediaApi\Authentication\Authentication;
+use Faldor20\MessagemediaApi\Authentication\Authentication;
 
 /**
  * The main client for interacting with the MessageMedia API.

@@ -1,10 +1,10 @@
 <?php
 
-namespace Schoolzine\MessagemediaApi\Model;
+namespace Faldor20\MessagemediaApi\Model;
 
-use Schoolzine\MessagemediaApi\Enum\Capability;
-use Schoolzine\MessagemediaApi\Enum\Classification;
-use Schoolzine\MessagemediaApi\Enum\Type;
+use Faldor20\MessagemediaApi\Enum\Capability;
+use Faldor20\MessagemediaApi\Enum\Classification;
+use Faldor20\MessagemediaApi\Enum\Type;
 
 /**
  * A dedicated number.

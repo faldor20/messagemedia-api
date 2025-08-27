@@ -1,6 +1,6 @@
 <?php
 
-namespace Schoolzine\MessagemediaApi\Enum;
+namespace Faldor20\MessagemediaApi\Enum;
 
 /**
  * The capability of a dedicated number.

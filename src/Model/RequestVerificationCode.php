@@ -1,9 +1,9 @@
 <?php
 
-namespace Schoolzine\MessagemediaApi\Model;
+namespace Faldor20\MessagemediaApi\Model;
 
-use Schoolzine\MessagemediaApi\Enum\SenderAddressType;
-use Schoolzine\MessagemediaApi\Enum\UsageType;
+use Faldor20\MessagemediaApi\Enum\SenderAddressType;
+use Faldor20\MessagemediaApi\Enum\UsageType;
 
 class RequestVerificationCode
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Schoolzine\MessagemediaApi\Authentication;
+namespace Faldor20\MessagemediaApi\Authentication;
 
 use Psr\Http\Message\RequestInterface;
 

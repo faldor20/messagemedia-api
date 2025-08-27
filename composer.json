@@ -1,9 +1,9 @@
 {
-    "name": "schoolzine/messagemedia-api",
+    "name": "faldor20/messagemedia-api",
     "version": "1.0.0",
     "autoload": {
         "psr-4": {
-            "Schoolzine\\MessagemediaApi\\": "src/"
+            "faldor20\\MessagemediaApi\\": "src/"
         }
     },
     "authors": [

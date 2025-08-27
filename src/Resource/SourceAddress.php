@@ -1,19 +1,19 @@
 <?php
 
-namespace Schoolzine\MessagemediaApi\Resource;
+namespace Faldor20\MessagemediaApi\Resource;
 
-use Schoolzine\MessagemediaApi\Client;
-use Schoolzine\MessagemediaApi\Enum\SenderAddressType;
-use Schoolzine\MessagemediaApi\Enum\UsageType;
-use Schoolzine\MessagemediaApi\Model\GetAllApprovedSenderAddresses;
-use Schoolzine\MessagemediaApi\Model\GetSenderAddress;
-use Schoolzine\MessagemediaApi\Model\PatchLabelMyOwnNumber;
-use Schoolzine\MessagemediaApi\Model\RequestAlphaTag;
-use Schoolzine\MessagemediaApi\Model\RequestVerificationCode;
-use Schoolzine\MessagemediaApi\Model\AlphaTagRequestItem;
-use Schoolzine\MessagemediaApi\Model\VerificationCodeRequestItem;
-use Schoolzine\MessagemediaApi\Model\PostVerificationCode;
-use Schoolzine\MessagemediaApi\Model\ReVerifySenderAddressRequestItem;
+use Faldor20\MessagemediaApi\Client;
+use Faldor20\MessagemediaApi\Enum\SenderAddressType;
+use Faldor20\MessagemediaApi\Enum\UsageType;
+use Faldor20\MessagemediaApi\Model\GetAllApprovedSenderAddresses;
+use Faldor20\MessagemediaApi\Model\GetSenderAddress;
+use Faldor20\MessagemediaApi\Model\PatchLabelMyOwnNumber;
+use Faldor20\MessagemediaApi\Model\RequestAlphaTag;
+use Faldor20\MessagemediaApi\Model\RequestVerificationCode;
+use Faldor20\MessagemediaApi\Model\AlphaTagRequestItem;
+use Faldor20\MessagemediaApi\Model\VerificationCodeRequestItem;
+use Faldor20\MessagemediaApi\Model\PostVerificationCode;
+use Faldor20\MessagemediaApi\Model\ReVerifySenderAddressRequestItem;
 
 /**
  * The Source Address API allows you to manage your sender addresses.

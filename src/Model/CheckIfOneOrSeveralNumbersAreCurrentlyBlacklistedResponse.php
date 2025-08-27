@@ -1,6 +1,6 @@
 <?php
 
-namespace Schoolzine\MessagemediaApi\Model;
+namespace Faldor20\MessagemediaApi\Model;
 
 /**
  * A response to checking if one or several numbers are currently blacklisted.

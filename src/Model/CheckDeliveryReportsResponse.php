@@ -1,6 +1,6 @@
 <?php
 
-namespace Schoolzine\MessagemediaApi\Model;
+namespace Faldor20\MessagemediaApi\Model;
 
 class CheckDeliveryReportsResponse
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Schoolzine\MessagemediaApi\Tests\Integration;
+namespace Faldor20\MessagemediaApi\Tests\Integration;
 
 use GuzzleHttp\Client as GuzzleHttpClient;
 use GuzzleHttp\Handler\MockHandler;
@@ -8,10 +8,10 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use PHPUnit\Framework\TestCase;
-use Schoolzine\MessagemediaApi\Authentication\Basic;
-use Schoolzine\MessagemediaApi\Client;
-use Schoolzine\MessagemediaApi\Model\Message;
-use Schoolzine\MessagemediaApi\Model\SendMessagesRequest;
+use Faldor20\MessagemediaApi\Authentication\Basic;
+use Faldor20\MessagemediaApi\Client;
+use Faldor20\MessagemediaApi\Model\Message;
+use Faldor20\MessagemediaApi\Model\SendMessagesRequest;
 
 class ClientTest extends TestCase
 {

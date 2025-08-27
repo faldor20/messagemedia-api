@@ -1,12 +1,12 @@
 <?php
 
-namespace Schoolzine\MessagemediaApi\Resource;
+namespace Faldor20\MessagemediaApi\Resource;
 
-use Schoolzine\MessagemediaApi\Client;
-use Schoolzine\MessagemediaApi\Model\CheckRepliesResponse;
-use Schoolzine\MessagemediaApi\Model\Reply;
+use Faldor20\MessagemediaApi\Client;
+use Faldor20\MessagemediaApi\Model\CheckRepliesResponse;
+use Faldor20\MessagemediaApi\Model\Reply;
 
-use Schoolzine\MessagemediaApi\Model\ConfirmRepliesAsReceivedRequest;
+use Faldor20\MessagemediaApi\Model\ConfirmRepliesAsReceivedRequest;
 
 /**
  * The Replies API allows you to check for replies to your messages.

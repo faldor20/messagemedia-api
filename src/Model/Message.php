@@ -1,9 +1,9 @@
 <?php
 
-namespace Schoolzine\MessagemediaApi\Model;
+namespace Faldor20\MessagemediaApi\Model;
 
-use Schoolzine\MessagemediaApi\Enum\Format;
-use Schoolzine\MessagemediaApi\Enum\SourceNumberType;
+use Faldor20\MessagemediaApi\Enum\Format;
+use Faldor20\MessagemediaApi\Enum\SourceNumberType;
 
 /**
  * A message to be sent.

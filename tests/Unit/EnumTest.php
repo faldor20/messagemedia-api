@@ -1,9 +1,9 @@
 <?php
 
-namespace Schoolzine\MessagemediaApi\Tests\Unit;
+namespace Faldor20\MessagemediaApi\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use Schoolzine\MessagemediaApi\Enum\Status;
+use Faldor20\MessagemediaApi\Enum\Status;
 
 class EnumTest extends TestCase
 {
@@ -42,7 +42,7 @@ class EnumTest extends TestCase
     public function testFromThrowsExceptionForInvalidValue()
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid enum value "invalid_status" for Schoolzine\MessagemediaApi\Enum\Status');
+        $this->expectExceptionMessage('Invalid enum value "invalid_status" for Faldor20\MessagemediaApi\Enum\Status');
         Status::from('invalid_status');
     }
 }

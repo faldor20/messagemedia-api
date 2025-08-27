@@ -7,7 +7,7 @@ This SDK provides a convenient way to interact with the MessageMedia API using P
 The recommended way to install the SDK is via Composer.
 
 ```bash
-composer require schoolzine/messagemedia-api
+composer require faldor20/messagemedia-api
 ```
 
 ## Usage
@@ -23,11 +23,11 @@ The simplest way to use the SDK is with automatic dependency discovery. The SDK 
 
 require __DIR__ . '/vendor/autoload.php';
 
-use Schoolzine\MessagemediaApi\Client;
-use Schoolzine\MessagemediaApi\Authentication\Basic;
-use Schoolzine\MessagemediaApi\Model\Message;
-use Schoolzine\MessagemediaApi\Model\SendMessagesRequest;
-use Schoolzine\MessagemediaApi\Enum\Format;
+use Faldor20\MessagemediaApi\Client;
+use Faldor20\MessagemediaApi\Authentication\Basic;
+use Faldor20\MessagemediaApi\Model\Message;
+use Faldor20\MessagemediaApi\Model\SendMessagesRequest;
+use Faldor20\MessagemediaApi\Enum\Format;
 
 // Your API key and secret
 $apiKey = 'YOUR_API_KEY';
@@ -70,13 +70,13 @@ For more control or when using custom HTTP clients/factories, you can explicitly
 
 require __DIR__ . '/vendor/autoload.php';
 
-use Schoolzine\MessagemediaApi\Client;
-use Schoolzine\MessagemediaApi\Authentication\Basic;
-use Schoolzine\MessagemediaApi\Model\Message;
-use Schoolzine\MessagemediaApi\Model\SendMessagesRequest;
+use Faldor20\MessagemediaApi\Client;
+use Faldor20\MessagemediaApi\Authentication\Basic;
+use Faldor20\MessagemediaApi\Model\Message;
+use Faldor20\MessagemediaApi\Model\SendMessagesRequest;
 use GuzzleHttp\Client as HttpClient;
 use Nyholm\Psr7\Factory\Psr17Factory;
-use Schoolzine\MessagemediaApi\Enum\Format;
+use Faldor20\MessagemediaApi\Enum\Format;
 
 // Your API key and secret
 $apiKey = 'YOUR_API_KEY';
@@ -135,7 +135,7 @@ The SDK supports two primary authentication methods:
 Use the `Basic` class to authenticate with your API key and secret:
 
 ```php
-use Schoolzine\MessagemediaApi\Authentication\Basic;
+use Faldor20\MessagemediaApi\Authentication\Basic;
 
 $authentication = new Basic('YOUR_API_KEY', 'YOUR_API_SECRET');
 ```
@@ -145,7 +145,7 @@ $authentication = new Basic('YOUR_API_KEY', 'YOUR_API_SECRET');
 Use the `Hmac` class for HMAC authentication. The SDK handles the signing process automatically:
 
 ```php
-use Schoolzine\MessagemediaApi\Authentication\Hmac;
+use Faldor20\MessagemediaApi\Authentication\Hmac;
 
 $authentication = new Hmac('YOUR_API_KEY', 'YOUR_API_SECRET');
 ```

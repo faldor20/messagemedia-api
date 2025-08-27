@@ -2,14 +2,14 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use Schoolzine\MessagemediaApi\Client;
-use Schoolzine\MessagemediaApi\Authentication\Basic;
-use Schoolzine\MessagemediaApi\Model\Message;
-use Schoolzine\MessagemediaApi\Model\SendMessagesRequest;
+use Faldor20\MessagemediaApi\Client;
+use Faldor20\MessagemediaApi\Authentication\Basic;
+use Faldor20\MessagemediaApi\Model\Message;
+use Faldor20\MessagemediaApi\Model\SendMessagesRequest;
 use GuzzleHttp\Client as HttpClient;
 use Nyholm\Psr7\Factory\Psr17Factory;
 
-use Schoolzine\MessagemediaApi\Enum\Format;
+use Faldor20\MessagemediaApi\Enum\Format;
 
 // Your API key and secret
 $apiKey = 'YOUR_API_KEY';

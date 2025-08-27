@@ -1,16 +1,16 @@
 <?php
 
-namespace Schoolzine\MessagemediaApi\Resource;
+namespace Faldor20\MessagemediaApi\Resource;
 
-use Schoolzine\MessagemediaApi\Client;
-use Schoolzine\MessagemediaApi\Enum\Type;
-use Schoolzine\MessagemediaApi\Enum\Types;
-use Schoolzine\MessagemediaApi\Enum\Classification;
-use Schoolzine\MessagemediaApi\Enum\Capability;
-use Schoolzine\MessagemediaApi\Model\NumbersListResponse;
-use Schoolzine\MessagemediaApi\Model\DedicatedNumber;
+use Faldor20\MessagemediaApi\Client;
+use Faldor20\MessagemediaApi\Enum\Type;
+use Faldor20\MessagemediaApi\Enum\Types;
+use Faldor20\MessagemediaApi\Enum\Classification;
+use Faldor20\MessagemediaApi\Enum\Capability;
+use Faldor20\MessagemediaApi\Model\NumbersListResponse;
+use Faldor20\MessagemediaApi\Model\DedicatedNumber;
 
-use Schoolzine\MessagemediaApi\Model\Assignment;
+use Faldor20\MessagemediaApi\Model\Assignment;
 
 /**
  * The Dedicated Numbers API allows you to purchase, provision and configure the dedicated numbers assigned to your Sinch account.

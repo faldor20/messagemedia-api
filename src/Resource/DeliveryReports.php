@@ -1,13 +1,13 @@
 <?php
 
-namespace Schoolzine\MessagemediaApi\Resource;
+namespace Faldor20\MessagemediaApi\Resource;
 
-use Schoolzine\MessagemediaApi\Client;
-use Schoolzine\MessagemediaApi\Model\CheckDeliveryReportsResponse;
-use Schoolzine\MessagemediaApi\Model\DeliveryReport;
-use Schoolzine\MessagemediaApi\Enum\Status;
+use Faldor20\MessagemediaApi\Client;
+use Faldor20\MessagemediaApi\Model\CheckDeliveryReportsResponse;
+use Faldor20\MessagemediaApi\Model\DeliveryReport;
+use Faldor20\MessagemediaApi\Enum\Status;
 
-use Schoolzine\MessagemediaApi\Model\ConfirmDeliveryReportsAsReceivedRequest;
+use Faldor20\MessagemediaApi\Model\ConfirmDeliveryReportsAsReceivedRequest;
 
 /**
  * The Delivery Reports API allows you to check the status of messages that you have sent.
