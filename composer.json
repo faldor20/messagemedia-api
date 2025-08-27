@@ -6,6 +6,7 @@
             "faldor20\\MessagemediaApi\\": "src/"
         }
     },
+    "license": "MIT",
     "authors": [
         {
             "name": "faldor20",
