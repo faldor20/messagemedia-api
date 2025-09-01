@@ -2,6 +2,8 @@
 
 namespace Faldor20\MessagemediaApi\Model;
 
+use Faldor20\MessagemediaApi\Enum\Status;
+
 /**
  * The status of a message.
  */
@@ -63,9 +65,9 @@ class GetMessageStatusResponse
     public ?string $messageExpiryTimestamp = null;
 
     /**
-     * @var string|null The status of the message.
+     * @var Status|null The status of the message.
      */
-    public ?string $status = null;
+    public ?Status $status = null;
 
     /**
      * GetMessageStatusResponse constructor.
@@ -81,7 +83,7 @@ class GetMessageStatusResponse
      * @param string|null $sourceNumber Source number of the message
      * @param string|null $sourceNumberType Type of source address specified
      * @param string|null $messageExpiryTimestamp Date time after which the message expires
-     * @param string|null $status The status of the message
+     * @param Status|null $status The status of the message
      */
     public function __construct(
         ?string $format = null,
@@ -95,7 +97,7 @@ class GetMessageStatusResponse
         ?string $sourceNumber = null,
         ?string $sourceNumberType = null,
         ?string $messageExpiryTimestamp = null,
-        ?string $status = null
+        ?Status $status = null
     ) {
         $this->format = $format;
         $this->content = $content;

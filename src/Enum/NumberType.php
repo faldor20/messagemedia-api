@@ -5,14 +5,14 @@ namespace Faldor20\MessagemediaApi\Enum;
 use MyCLabs\Enum\Enum;
 
 /**
- * The types of a dedicated number.
+ * The type of a dedicated number.
  *
- * @method static Types MOBILE()
- * @method static Types LANDLINE()
- * @method static Types TOLL_FREE()
- * @method static Types SHORT_CODE()
+ * @method static NumberType MOBILE()
+ * @method static NumberType LANDLINE()
+ * @method static NumberType TOLL_FREE()
+ * @method static NumberType SHORT_CODE()
  */
-final class Types extends Enum
+final class NumberType extends Enum
 {
     /**
      * Mobile number.

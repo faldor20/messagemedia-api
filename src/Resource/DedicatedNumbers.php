@@ -4,8 +4,7 @@ namespace Faldor20\MessagemediaApi\Resource;
 
 use Faldor20\MessagemediaApi\Enum\Capability;
 use Faldor20\MessagemediaApi\Enum\Classification;
-use Faldor20\MessagemediaApi\Enum\Type;
-use Faldor20\MessagemediaApi\Enum\Types;
+use Faldor20\MessagemediaApi\Enum\NumberType;
 use Faldor20\MessagemediaApi\Model\Assignment;
 use Faldor20\MessagemediaApi\Model\DedicatedNumber;
 use Faldor20\MessagemediaApi\Model\NumbersListResponse;
@@ -77,7 +76,7 @@ class DedicatedNumbers
             $dedicatedNumber->country = $numberData['country'] ?? null;
             $dedicatedNumber->id = $numberData['id'] ?? null;
             $dedicatedNumber->phoneNumber = $numberData['phone_number'] ?? null;
-            $dedicatedNumber->type = isset($numberData['type']) ? Type::from($numberData['type']) : null;
+            $dedicatedNumber->type = isset($numberData['type']) ? NumberType::from($numberData['type']) : null;
             $numbersListResponse->data[] = $dedicatedNumber;
         }
 
@@ -109,7 +108,7 @@ class DedicatedNumbers
         $dedicatedNumber->country = $data['country'] ?? null;
         $dedicatedNumber->id = $data['id'] ?? null;
         $dedicatedNumber->phoneNumber = $data['phone_number'] ?? null;
-        $dedicatedNumber->type = isset($data['type']) ? Type::from($data['type']) : null;
+        $dedicatedNumber->type = isset($data['type']) ? NumberType::from($data['type']) : null;
 
         return $dedicatedNumber;
     }

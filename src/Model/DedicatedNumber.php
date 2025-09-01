@@ -4,7 +4,7 @@ namespace Faldor20\MessagemediaApi\Model;
 
 use Faldor20\MessagemediaApi\Enum\Capability;
 use Faldor20\MessagemediaApi\Enum\Classification;
-use Faldor20\MessagemediaApi\Enum\Type;
+use Faldor20\MessagemediaApi\Enum\NumberType;
 
 /**
  * A dedicated number.
@@ -42,29 +42,29 @@ class DedicatedNumber
     public ?string $phoneNumber = null;
 
     /**
-     * @var Type|null The type of the number.
+     * @var NumberType|null The type of the number.
      */
-    public ?Type $type = null;
+    public ?NumberType $type = null;
 
     /**
      * DedicatedNumber constructor.
      *
      * @param string|null $availableAfter The date and time after which the number is available
      * @param Capability[] $capabilities The capabilities of the number
-     * @param Classification|string|null $classification The classification of the number (enum instance or string)
+     * @param Classification|null $classification The classification of the number 
      * @param string|null $country The country of the number
      * @param string|null $id The ID of the number
      * @param string|null $phoneNumber The phone number
-     * @param Type|string|null $type The type of the number (enum instance or string)
+     * @param NumberType|null $type The type of the number 
      */
     public function __construct(
         ?string $availableAfter = null,
         array $capabilities = [],
-        $classification = null,
+        ?Classification $classification = null,
         ?string $country = null,
         ?string $id = null,
         ?string $phoneNumber = null,
-        $type = null
+        ?NumberType $type = null
     ) {
         $this->availableAfter = $availableAfter;
         $this->capabilities = $capabilities;
@@ -72,7 +72,7 @@ class DedicatedNumber
         $this->country = $country;
         $this->id = $id;
         $this->phoneNumber = $phoneNumber;
-        $this->type = $this->normalizeEnum($type, Type::class);
+        $this->type = $this->normalizeEnum($type, NumberType::class);
     }
 
     /**
