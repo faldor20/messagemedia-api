@@ -40,23 +40,11 @@ class Messages
         $response = $this->client->sendRequest($request);
         $this->client->assertExpectedResponse($response, [200], [403, 404]);
 
-        $data = json_decode($response->getBody()->getContents(), true);
-
-        $messageStatus = new GetMessageStatusResponse();
-        $messageStatus->format = isset($data['format']) ? Format::from($data['format']) : null;
-        $messageStatus->content = $data['content'] ?? null;
-        $messageStatus->metadata = $data['metadata'] ?? null;
-        $messageStatus->messageId = $data['message_id'] ?? null;
-        $messageStatus->callbackUrl = $data['callback_url'] ?? null;
-        $messageStatus->deliveryReport = $data['delivery_report'] ?? null;
-        $messageStatus->destinationNumber = $data['destination_number'] ?? null;
-        $messageStatus->scheduled = $data['scheduled'] ?? null;
-        $messageStatus->sourceNumber = $data['source_number'] ?? null;
-        $messageStatus->sourceNumberType = isset($data['source_number_type']) ? SourceNumberType::from($data['source_number_type']) : null;
-        $messageStatus->messageExpiryTimestamp = $data['message_expiry_timestamp'] ?? null;
-        $messageStatus->status = isset($data['status']) ? Status::from($data['status']) : null;
-
-        return $messageStatus;
+        return $this->client->getSerializer()->deserialize(
+            $response->getBody()->getContents(),
+            GetMessageStatusResponse::class,
+            'json'
+        );
     }
 
     /**
@@ -75,10 +63,11 @@ class Messages
     {
         $requestBody = new CancelScheduledMessageRequest();
         $request = $this->client->getRequestFactory()->createRequest('PUT', '/v1/messages/' . $messageId);
+        $json = $this->client->getSerializer()->serialize($requestBody, 'json');
         $request = $request
             ->withHeader('Content-Type', 'application/json')
             ->withHeader('Accept', 'application/json')
-            ->withBody($this->client->getStreamFactory()->createStream(json_encode($requestBody)));
+            ->withBody($this->client->getStreamFactory()->createStream($json));
         $response = $this->client->sendRequest($request);
         $this->client->assertExpectedResponse($response, [200], [400, 403, 404]);
     }
@@ -96,17 +85,19 @@ class Messages
     public function send(SendMessagesRequest $messages): SendMessagesResponse
     {
         $request = $this->client->getRequestFactory()->createRequest('POST', '/v1/messages');
+        $json = $this->client->getSerializer()->serialize($messages, 'json');
         $request = $request
             ->withHeader('Content-Type', 'application/json')
             ->withHeader('Accept', 'application/json')
-            ->withBody($this->client->getStreamFactory()->createStream(json_encode($messages)));
+            ->withBody($this->client->getStreamFactory()->createStream($json));
         $response = $this->client->sendRequest($request);
         $this->client->assertExpectedResponse($response, [202], [400, 403]);
 
-        $data = json_decode($response->getBody()->getContents(), true);
-
-        $sendMessagesResponse = new SendMessagesResponse();
-        $sendMessagesResponse->messages = $data['messages'] ?? [];
+        $sendMessagesResponse = $this->client->getSerializer()->deserialize(
+            $response->getBody()->getContents(),
+            SendMessagesResponse::class,
+            'json'
+        );
 
         return $sendMessagesResponse;
     }

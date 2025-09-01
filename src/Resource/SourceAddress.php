@@ -83,28 +83,12 @@ class SourceAddress
 
         $data = json_decode($response->getBody()->getContents(), true);
 
-        $getAllApprovedSenderAddresses = new GetAllApprovedSenderAddresses();
+        $items = $data['data'] ?? [];
+        $addresses = array_map(function(array $item) {
+            return $this->client->getSerializer()->denormalize($item, GetSenderAddress::class);
+        }, $items);
 
-        foreach ($data['data'] as $senderAddressData) {
-            $getSenderAddress = new GetSenderAddress();
-            $getSenderAddress->id = $senderAddressData['id'] ?? null;
-            $getSenderAddress->senderAddress = $senderAddressData['sender_address'] ?? null;
-            $getSenderAddress->senderAddressType = isset($senderAddressData['sender_address_type']) ? SenderAddressType::from($senderAddressData['sender_address_type']) : null;
-            $getSenderAddress->usageType = isset($senderAddressData['usage_type']) ? UsageType::from($senderAddressData['usage_type']) : null;
-            $getSenderAddress->destinationCountries = $senderAddressData['destination_countries'] ?? null;
-            $getSenderAddress->reason = $senderAddressData['reason'] ?? null;
-            $getSenderAddress->label = $senderAddressData['label'] ?? null;
-            $getSenderAddress->accountId = $senderAddressData['account_id'] ?? null;
-            $getSenderAddress->createdDate = $senderAddressData['created_date'] ?? null;
-            $getSenderAddress->lastModifiedDate = $senderAddressData['last_modified_date'] ?? null;
-            $getSenderAddress->expiry = $senderAddressData['expiry'] ?? null;
-            $getSenderAddress->displayStatus = $senderAddressData['display_status'] ?? null;
-            $getAllApprovedSenderAddresses->data[] = $getSenderAddress;
-        }
-
-        $getAllApprovedSenderAddresses->pagination = $data['pagination'] ?? null;
-
-        return $getAllApprovedSenderAddresses;
+        return new GetAllApprovedSenderAddresses($addresses, $data['pagination'] ?? null);
     }
 
     /**
@@ -124,23 +108,11 @@ class SourceAddress
         $response = $this->client->sendRequest($request);
         $this->client->assertExpectedResponse($response, [200], [400, 401, 403]);
 
-        $data = json_decode($response->getBody()->getContents(), true);
-
-        $getSenderAddress = new GetSenderAddress();
-        $getSenderAddress->id = $data['id'] ?? null;
-        $getSenderAddress->senderAddress = $data['sender_address'] ?? null;
-        $getSenderAddress->senderAddressType = isset($data['sender_address_type']) ? SenderAddressType::from($data['sender_address_type']) : null;
-        $getSenderAddress->usageType = isset($data['usage_type']) ? UsageType::from($data['usage_type']) : null;
-        $getSenderAddress->destinationCountries = $data['destination_countries'] ?? null;
-        $getSenderAddress->reason = $data['reason'] ?? null;
-        $getSenderAddress->label = $data['label'] ?? null;
-        $getSenderAddress->accountId = $data['account_id'] ?? null;
-        $getSenderAddress->createdDate = $data['created_date'] ?? null;
-        $getSenderAddress->lastModifiedDate = $data['last_modified_date'] ?? null;
-        $getSenderAddress->expiry = $data['expiry'] ?? null;
-        $getSenderAddress->displayStatus = $data['display_status'] ?? null;
-
-        return $getSenderAddress;
+        return $this->client->getSerializer()->deserialize(
+            $response->getBody()->getContents(),
+            GetSenderAddress::class,
+            'json'
+        );
     }
 
     /**
@@ -178,30 +150,19 @@ class SourceAddress
     public function updateLabel(string $id, PatchLabelMyOwnNumber $requestBody): GetSenderAddress
     {
         $request = $this->client->getRequestFactory()->createRequest('PATCH', '/v1/messaging/numbers/sender_address/addresses/' . $id);
+        $json = $this->client->getSerializer()->serialize($requestBody, 'json');
         $request = $request
         ->withHeader('Content-Type', 'application/json')
         ->withHeader('Accept', 'application/json')
-        ->withBody($this->client->getStreamFactory()->createStream(json_encode($requestBody)));
+        ->withBody($this->client->getStreamFactory()->createStream($json));
         $response = $this->client->sendRequest($request);
         $this->client->assertExpectedResponse($response, [200], [400, 401, 403]);
 
-        $data = json_decode($response->getBody()->getContents(), true);
-
-        $getSenderAddress = new GetSenderAddress();
-        $getSenderAddress->id = $data['id'] ?? null;
-        $getSenderAddress->senderAddress = $data['sender_address'] ?? null;
-        $getSenderAddress->senderAddressType = isset($data['sender_address_type']) ? SenderAddressType::from($data['sender_address_type']) : null;
-        $getSenderAddress->usageType = isset($data['usage_type']) ? UsageType::from($data['usage_type']) : null;
-        $getSenderAddress->destinationCountries = $data['destination_countries'] ?? null;
-        $getSenderAddress->reason = $data['reason'] ?? null;
-        $getSenderAddress->label = $data['label'] ?? null;
-        $getSenderAddress->accountId = $data['account_id'] ?? null;
-        $getSenderAddress->createdDate = $data['created_date'] ?? null;
-        $getSenderAddress->lastModifiedDate = $data['last_modified_date'] ?? null;
-        $getSenderAddress->expiry = $data['expiry'] ?? null;
-        $getSenderAddress->displayStatus = $data['display_status'] ?? null;
-
-        return $getSenderAddress;
+        return $this->client->getSerializer()->deserialize(
+            $response->getBody()->getContents(),
+            GetSenderAddress::class,
+            'json'
+        );
     }
 
     /**
@@ -219,10 +180,11 @@ class SourceAddress
     public function request(object $requestBody): object
     {
         $request = $this->client->getRequestFactory()->createRequest('POST', '/v1/messaging/numbers/sender_address/requests');
+        $json = $this->client->getSerializer()->serialize($requestBody, 'json');
         $request = $request
         ->withHeader('Content-Type', 'application/json')
         ->withHeader('Accept', 'application/json')
-        ->withBody($this->client->getStreamFactory()->createStream(json_encode($requestBody)));
+        ->withBody($this->client->getStreamFactory()->createStream($json));
         $response = $this->client->sendRequest($request);
         $this->client->assertExpectedResponse($response, [201], [400, 401, 403, 409]);
 
@@ -265,26 +227,16 @@ class SourceAddress
     public function verify(string $id, PostVerificationCode $requestBody): VerificationCodeRequestItem
     {
         $request = $this->client->getRequestFactory()->createRequest('POST', '/v1/messaging/numbers/sender_address/requests/' . $id . '/verify');
-        $request = $request->withBody($this->client->getStreamFactory()->createStream(json_encode($requestBody)));
+        $json = $this->client->getSerializer()->serialize($requestBody, 'json');
+        $request = $request->withBody($this->client->getStreamFactory()->createStream($json));
         $response = $this->client->sendRequest($request);
         $this->client->assertExpectedResponse($response, [201], [400, 401, 403, 404]);
 
-        $data = json_decode($response->getBody()->getContents(), true);
-
-        $responseModel = new VerificationCodeRequestItem();
-        $responseModel->id = $data['id'] ?? null;
-        $responseModel->senderAddress = $data['sender_address'] ?? null;
-        $responseModel->senderAddressType = isset($data['sender_address_type']) ? SenderAddressType::from($data['sender_address_type']) : null;
-        $responseModel->usageType = isset($data['usage_type']) ? UsageType::from($data['usage_type']) : null;
-        $responseModel->destinationCountries = $data['destination_countries'] ?? null;
-        $responseModel->reason = $data['reason'] ?? null;
-        $responseModel->label = $data['label'] ?? null;
-        $responseModel->status = $data['status'] ?? null;
-        $responseModel->accountId = $data['account_id'] ?? null;
-        $responseModel->createdDate = $data['created_date'] ?? null;
-        $responseModel->lastModifiedDate = $data['last_modified_date'] ?? null;
-
-        return $responseModel;
+        return $this->client->getSerializer()->deserialize(
+            $response->getBody()->getContents(),
+            VerificationCodeRequestItem::class,
+            'json'
+        );
     }
 
     /**
@@ -305,22 +257,11 @@ class SourceAddress
         $response = $this->client->sendRequest($request);
         $this->client->assertExpectedResponse($response, [200], [400, 401, 403, 404]);
 
-        $data = json_decode($response->getBody()->getContents(), true);
-
-        $responseModel = new ReVerifySenderAddressRequestItem();
-        $responseModel->id = $data['id'] ?? null;
-        $responseModel->senderAddress = $data['sender_address'] ?? null;
-        $responseModel->senderAddressType = isset($data['sender_address_type']) ? SenderAddressType::from($data['sender_address_type']) : null;
-        $responseModel->usageType = isset($data['usage_type']) ? UsageType::from($data['usage_type']) : null;
-        $responseModel->destinationCountries = $data['destination_countries'] ?? null;
-        $responseModel->reason = $data['reason'] ?? null;
-        $responseModel->label = $data['label'] ?? null;
-        $responseModel->status = $data['status'] ?? null;
-        $responseModel->accountId = $data['account_id'] ?? null;
-        $responseModel->createdDate = $data['created_date'] ?? null;
-        $responseModel->lastModifiedDate = $data['last_modified_date'] ?? null;
-
-        return $responseModel;
+        return $this->client->getSerializer()->deserialize(
+            $response->getBody()->getContents(),
+            ReVerifySenderAddressRequestItem::class,
+            'json'
+        );
     }
 
     /**
@@ -341,22 +282,11 @@ class SourceAddress
         $response = $this->client->sendRequest($request);
         $this->client->assertExpectedResponse($response, [200], [400, 401, 403, 404]);
 
-        $data = json_decode($response->getBody()->getContents(), true);
-
-        $responseModel = new AlphaTagRequestItem();
-        $responseModel->id = $data['id'] ?? null;
-        $responseModel->senderAddress = $data['sender_address'] ?? null;
-        $responseModel->senderAddressType = isset($data['sender_address_type']) ? SenderAddressType::from($data['sender_address_type']) : null;
-        $responseModel->usageType = isset($data['usage_type']) ? UsageType::from($data['usage_type']) : null;
-        $responseModel->destinationCountries = $data['destination_countries'] ?? null;
-        $responseModel->reason = $data['reason'] ?? null;
-        $responseModel->label = $data['label'] ?? null;
-        $responseModel->status = $data['status'] ?? null;
-        $responseModel->accountId = $data['account_id'] ?? null;
-        $responseModel->createdDate = $data['created_date'] ?? null;
-        $responseModel->lastModifiedDate = $data['last_modified_date'] ?? null;
-
-        return $responseModel;
+        return $this->client->getSerializer()->deserialize(
+            $response->getBody()->getContents(),
+            AlphaTagRequestItem::class,
+            'json'
+        );
     }
 }
 

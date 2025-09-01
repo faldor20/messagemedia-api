@@ -5,7 +5,7 @@ namespace Faldor20\MessagemediaApi\Model;
 /**
  * A request to confirm replies as received.
  */
-class ConfirmRepliesAsReceivedRequest implements \JsonSerializable
+class ConfirmRepliesAsReceivedRequest
 {
     /** @var string[] */
     public array $replyIds = [];
@@ -17,13 +17,4 @@ class ConfirmRepliesAsReceivedRequest implements \JsonSerializable
     	$this->replyIds = $replyIds;
     }
 
-    /**
-     * @return array<string, mixed>
-     */
-    public function jsonSerialize(): array
-    {
-        return [
-            'reply_ids' => $this->replyIds,
-        ];
-    }
 }

@@ -75,8 +75,8 @@ class GetSenderAddress
      *
      * @param string|null $id Primary ID of the record
      * @param string|null $senderAddress The Sender Address to be requested
-     * @param SenderAddressType|string|null $senderAddressType The Sender Address Type (enum instance or string)
-     * @param UsageType|string|null $usageType The Sender Address Usage Type (enum instance or string)
+     * @param SenderAddressType|null $senderAddressType The Sender Address Type (enum instance or string)
+     * @param UsageType|null $usageType The Sender Address Usage Type (enum instance or string)
      * @param array|null $destinationCountries List of 2-character ISO country codes this sender address applies to
      * @param string|null $reason The reason for the sender address request
      * @param string|null $label A reference name for the sender ID to allow you to easily track it
@@ -89,8 +89,8 @@ class GetSenderAddress
     public function __construct(
         ?string $id = null,
         ?string $senderAddress = null,
-        $senderAddressType = null,
-        $usageType = null,
+        ?SenderAddressType $senderAddressType = null,
+        ?UsageType $usageType = null,
         ?array $destinationCountries = null,
         ?string $reason = null,
         ?string $label = null,
@@ -102,8 +102,8 @@ class GetSenderAddress
     ) {
         $this->id = $id;
         $this->senderAddress = $senderAddress;
-        $this->senderAddressType = $this->normalizeEnum($senderAddressType, SenderAddressType::class);
-        $this->usageType = $this->normalizeEnum($usageType, UsageType::class);
+        $this->senderAddressType = $senderAddressType;
+        $this->usageType = $usageType;
         $this->destinationCountries = $destinationCountries;
         $this->reason = $reason;
         $this->label = $label;
@@ -114,27 +114,4 @@ class GetSenderAddress
         $this->displayStatus = $displayStatus;
     }
 
-    /**
-     * Normalize enum value - accepts either enum instance or string and returns enum instance
-     *
-     * @param mixed $value
-     * @param string $enumClass
-     * @return mixed|null
-     */
-    private function normalizeEnum($value, string $enumClass)
-    {
-        if ($value === null) {
-            return null;
-        }
-
-        if ($value instanceof $enumClass) {
-            return $value;
-        }
-
-        if (is_string($value)) {
-            return $enumClass::from($value);
-        }
-
-        throw new \InvalidArgumentException("Invalid value for {$enumClass}: " . var_export($value, true));
-    }
 }

@@ -8,7 +8,7 @@ use Faldor20\MessagemediaApi\Enum\SourceNumberType;
 /**
  * A message to be sent.
  */
-class Message implements \JsonSerializable
+class Message
 {
     /**
      * @var string|null URL replies and delivery reports to this message will be pushed to.
@@ -75,113 +75,46 @@ class Message implements \JsonSerializable
      *
      * @param string|null $content Content of the message
      * @param string|null $destinationNumber Destination number of the message
-     * @param Format|string|null $format The format of the message (enum instance or string)
+     * @param Format|null $format The format of the message (enum instance or string)
      * @param string|null $sourceNumber Source number of the message
      * @param string|null $callbackUrl URL replies and delivery reports will be pushed to
      * @param bool|null $deliveryReport Request a delivery report for this message
      * @param string|null $scheduled Scheduled delivery date time of the message
      * @param string|null $messageExpiryTimestamp Date time after which the message expires
      * @param array|null $metadata Metadata for the message as key value pairs
-     * @param SourceNumberType|string|null $sourceNumberType Type of source address specified (enum instance or string)
+     * @param SourceNumberType|null $sourceNumberType Type of source address specified (enum instance or string)
      * @param array|null $media URLs of media files for MMS messages
      * @param string|null $subject Subject field for MMS messages
      */
     public function __construct(
         ?string $content = null,
         ?string $destinationNumber = null,
-        $format = null,
+        ?Format $format = null,
         ?string $sourceNumber = null,
         ?string $callbackUrl = null,
         ?bool $deliveryReport = null,
         ?string $scheduled = null,
         ?string $messageExpiryTimestamp = null,
         ?array $metadata = null,
-        $sourceNumberType = null,
+        ?SourceNumberType $sourceNumberType = null,
         ?array $media = null,
         ?string $subject = null
     ) {
         $this->content = $content;
         $this->destinationNumber = $destinationNumber;
-        $this->format = $this->normalizeEnum($format, Format::class);
+        $this->format = $format;
         $this->sourceNumber = $sourceNumber;
         $this->callbackUrl = $callbackUrl;
         $this->deliveryReport = $deliveryReport;
         $this->scheduled = $scheduled;
         $this->messageExpiryTimestamp = $messageExpiryTimestamp;
         $this->metadata = $metadata;
-        $this->sourceNumberType = $this->normalizeEnum($sourceNumberType, SourceNumberType::class);
+        $this->sourceNumberType = $sourceNumberType;
         $this->media = $media;
         $this->subject = $subject;
     }
 
-    /**
-     * Normalize enum value - accepts either enum instance or string and returns enum instance
-     *
-     * @param mixed $value
-     * @param string $enumClass
-     * @return mixed|null
-     */
-    private function normalizeEnum($value, string $enumClass)
-    {
-        if ($value === null) {
-            return null;
-        }
 
-        if ($value instanceof $enumClass) {
-            return $value;
-        }
 
-        if (is_string($value)) {
-            return $enumClass::from($value);
-        }
-
-        throw new \InvalidArgumentException("Invalid value for {$enumClass}: " . var_export($value, true));
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function jsonSerialize(): array
-    {
-        $data = [];
-
-        if ($this->callbackUrl !== null) {
-            $data['callback_url'] = $this->callbackUrl;
-        }
-        if ($this->content !== null) {
-            $data['content'] = $this->content;
-        }
-        if ($this->destinationNumber !== null) {
-            $data['destination_number'] = $this->destinationNumber;
-        }
-        if ($this->deliveryReport !== null) {
-            $data['delivery_report'] = $this->deliveryReport;
-        }
-        if ($this->format !== null) {
-            $data['format'] = $this->format->getValue();
-        }
-        if ($this->messageExpiryTimestamp !== null) {
-            $data['message_expiry_timestamp'] = $this->messageExpiryTimestamp;
-        }
-        if ($this->metadata !== null) {
-            $data['metadata'] = $this->metadata;
-        }
-        if ($this->scheduled !== null) {
-            $data['scheduled'] = $this->scheduled;
-        }
-        if ($this->sourceNumber !== null) {
-            $data['source_number'] = $this->sourceNumber;
-        }
-        if ($this->sourceNumberType !== null) {
-            $data['source_number_type'] = $this->sourceNumberType->getValue();
-        }
-        if ($this->media !== null) {
-            $data['media'] = $this->media;
-        }
-        if ($this->subject !== null) {
-            $data['subject'] = $this->subject;
-        }
-
-        return $data;
-    }
+    
 }

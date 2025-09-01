@@ -24,8 +24,8 @@ class VerificationCodeRequestItem
      *
      * @param string|null $id The ID
      * @param string|null $senderAddress The sender address
-     * @param SenderAddressType|string|null $senderAddressType The sender address type (enum instance or string)
-     * @param UsageType|string|null $usageType The usage type (enum instance or string)
+     * @param SenderAddressType|null $senderAddressType The sender address type (enum instance or string)
+     * @param UsageType|null $usageType The usage type (enum instance or string)
      * @param array|null $destinationCountries List of destination countries
      * @param string|null $reason The reason for the request
      * @param string|null $label A reference label
@@ -37,8 +37,8 @@ class VerificationCodeRequestItem
     public function __construct(
         ?string $id = null,
         ?string $senderAddress = null,
-        $senderAddressType = null,
-        $usageType = null,
+        ?SenderAddressType $senderAddressType = null,
+        ?UsageType $usageType = null,
         ?array $destinationCountries = null,
         ?string $reason = null,
         ?string $label = null,
@@ -49,8 +49,8 @@ class VerificationCodeRequestItem
     ) {
         $this->id = $id;
         $this->senderAddress = $senderAddress;
-        $this->senderAddressType = $this->normalizeEnum($senderAddressType, SenderAddressType::class);
-        $this->usageType = $this->normalizeEnum($usageType, UsageType::class);
+        $this->senderAddressType = $senderAddressType;
+        $this->usageType = $usageType;
         $this->destinationCountries = $destinationCountries;
         $this->reason = $reason;
         $this->label = $label;
@@ -60,27 +60,5 @@ class VerificationCodeRequestItem
         $this->lastModifiedDate = $lastModifiedDate;
     }
 
-    /**
-     * Normalize enum value - accepts either enum instance or string and returns enum instance
-     *
-     * @param mixed $value
-     * @param string $enumClass
-     * @return mixed|null
-     */
-    private function normalizeEnum($value, string $enumClass)
-    {
-        if ($value === null) {
-            return null;
-        }
 
-        if ($value instanceof $enumClass) {
-            return $value;
-        }
-
-        if (is_string($value)) {
-            return $enumClass::from($value);
-        }
-
-        throw new \InvalidArgumentException("Invalid value for {$enumClass}: " . var_export($value, true));
-    }
 }

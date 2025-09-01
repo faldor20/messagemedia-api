@@ -14,8 +14,10 @@ use MyCLabs\Enum\Enum;
  * @method static Status REJECTED()
  * @method static Status UNDELIVERABLE()
  * @method static Status QUEUED()
+ * @method static Status PROCESSED()
  * @method static Status CANCELLED()
  * @method static Status SCHEDULED()
+ * @method static Status FAILED()
  */
 final class Status extends Enum
 {
@@ -55,6 +57,11 @@ final class Status extends Enum
     private const QUEUED = 'queued';
 
     /**
+     * The message has been processed.
+     */
+    private const PROCESSED = 'processed';
+
+    /**
      * The message was cancelled.
      */
     private const CANCELLED = 'cancelled';
@@ -63,4 +70,9 @@ final class Status extends Enum
      * The message is scheduled for delivery.
      */
     private const SCHEDULED = 'scheduled';
+
+    /**
+     * The message has failed.
+     */
+    private const FAILED = 'failed';
 }

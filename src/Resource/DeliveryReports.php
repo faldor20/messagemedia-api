@@ -44,26 +44,12 @@ class DeliveryReports
 
         $data = json_decode($response->getBody()->getContents(), true);
 
-        $deliveryReports = [];
-        foreach ($data['delivery_reports'] as $reportData) {
-            $deliveryReport = new DeliveryReport();
-            $deliveryReport->callbackUrl = $reportData['callback_url'] ?? null;
-            $deliveryReport->deliveryReportId = $reportData['delivery_report_id'] ?? null;
-            $deliveryReport->sourceNumber = $reportData['source_number'] ?? null;
-            $deliveryReport->dateReceived = $reportData['date_received'] ?? null;
-            $deliveryReport->status = isset($reportData['status']) ? Status::from($reportData['status']) : null;
-            $deliveryReport->delay = $reportData['delay'] ?? null;
-            $deliveryReport->submittedDate = $reportData['submitted_date'] ?? null;
-            $deliveryReport->originalText = $reportData['original_text'] ?? null;
-            $deliveryReport->messageId = $reportData['message_id'] ?? null;
-            $deliveryReport->vendorAccountId = $reportData['vendor_account_id'] ?? null;
-            $deliveryReport->metadata = $reportData['metadata'] ?? null;
-            $deliveryReports[] = $deliveryReport;
-        }
-        $checkDeliveryReportsResponse = new CheckDeliveryReportsResponse($deliveryReports);
+        $deliveryReports = $data['delivery_reports'] ?? [];
+        $deliveryReports = array_map(function(array $item) {
+            return $this->client->getSerializer()->denormalize($item, DeliveryReport::class);
+        }, $deliveryReports);
 
-
-        return $checkDeliveryReportsResponse;
+        return new CheckDeliveryReportsResponse($deliveryReports);
     }
 
     /**
@@ -84,10 +70,11 @@ class DeliveryReports
     public function confirm(ConfirmDeliveryReportsAsReceivedRequest $requestBody): void
     {
         $request = $this->client->getRequestFactory()->createRequest('POST', '/v1/delivery_reports/confirmed');
+        $json = $this->client->getSerializer()->serialize($requestBody, 'json');
         $request = $request
         ->withHeader('Content-Type', 'application/json')
         ->withHeader('Accept', 'application/json')
-        ->withBody($this->client->getStreamFactory()->createStream(json_encode($requestBody)));
+        ->withBody($this->client->getStreamFactory()->createStream($json));
         $response = $this->client->sendRequest($request);
         $this->client->assertExpectedResponse($response, [202], [400, 403, 404]);
     }

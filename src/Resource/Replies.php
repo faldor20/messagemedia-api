@@ -44,21 +44,10 @@ class Replies
 
         $data = json_decode($response->getBody()->getContents(), true);
 
-        $replies = [];
-
-        foreach ($data['replies'] as $replyData) {
-            $reply = new Reply();
-            $reply->callbackUrl = $replyData['callback_url'] ?? null;
-            $reply->content = $replyData['content'] ?? null;
-            $reply->dateReceived = $replyData['date_received'] ?? null;
-            $reply->destinationNumber = $replyData['destination_number'] ?? null;
-            $reply->messageId = $replyData['message_id'] ?? null;
-            $reply->metadata = $replyData['metadata'] ?? null;
-            $reply->replyId = $replyData['reply_id'] ?? null;
-            $reply->sourceNumber = $replyData['source_number'] ?? null;
-            $reply->vendorAccountId = $replyData['vendor_account_id'] ?? null;
-            $replies[] = $reply;
-        }
+        $replies = $data['replies'] ?? [];
+        $replies = array_map(function(array $item) {
+            return $this->client->getSerializer()->denormalize($item, Reply::class);
+        }, $replies);
 
         return new CheckRepliesResponse($replies);
     }
@@ -80,10 +69,11 @@ class Replies
     public function confirm(ConfirmRepliesAsReceivedRequest $requestBody): void
     {
         $request = $this->client->getRequestFactory()->createRequest('POST', '/v1/replies/confirmed');
+        $json = $this->client->getSerializer()->serialize($requestBody, 'json');
         $request = $request
         ->withHeader('Content-Type', 'application/json')
         ->withHeader('Accept', 'application/json')
-        ->withBody($this->client->getStreamFactory()->createStream(json_encode($requestBody)));
+        ->withBody($this->client->getStreamFactory()->createStream($json));
         $response = $this->client->sendRequest($request);
         $this->client->assertExpectedResponse($response, [202], [400, 403, 404]);
     }

@@ -2,7 +2,7 @@
 
 namespace Faldor20\MessagemediaApi\Model;
 
-class SendMessagesRequest implements \JsonSerializable
+class SendMessagesRequest
 {
     /** @var Message[] */
     public array $messages = [];
@@ -17,13 +17,4 @@ class SendMessagesRequest implements \JsonSerializable
         $this->messages = $messages;
     }
 
-    /**
-     * @return array<string, mixed>
-     */
-    public function jsonSerialize(): array
-    {
-        return [
-            'messages' => $this->messages,
-        ];
-    }
 }

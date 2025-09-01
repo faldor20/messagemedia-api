@@ -18,6 +18,15 @@ use Faldor20\MessagemediaApi\Exception\ForbiddenException;
 use Faldor20\MessagemediaApi\Exception\ConflictException;
 use Faldor20\MessagemediaApi\Exception\NotFoundException;
 use Faldor20\MessagemediaApi\Exception\UnexpectedStatusCodeException;
+use Faldor20\MessagemediaApi\Serializer\MyclabsEnumNormalizer;
+use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
+use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
+use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * The main client for interacting with the MessageMedia API.
@@ -31,6 +40,7 @@ class Client
     private RequestFactoryInterface $requestFactory;
     private StreamFactoryInterface $streamFactory;
     private string $baseUri;
+    private Serializer $serializer;
 
     /**
      * Client constructor.
@@ -55,6 +65,7 @@ class Client
         $this->requestFactory = $requestFactory ?? $this->discoverRequestFactory();
         $this->streamFactory = $streamFactory ?? $this->discoverStreamFactory();
         $this->baseUri = $baseUri;
+        $this->serializer = $this->createSerializer();
     }
 
     /**
@@ -158,6 +169,14 @@ class Client
     }
 
     /**
+     * Gets the serializer instance.
+     */
+    public function getSerializer(): Serializer
+    {
+        return $this->serializer;
+    }
+
+    /**
      * Access the Messages API resource.
      *
      * @return Resource\Messages
@@ -245,6 +264,20 @@ class Client
     private function discoverStreamFactory(): StreamFactoryInterface
     {
         return Psr17FactoryDiscovery::findStreamFactory();
+    }
+
+    /**
+     * Create Symfony Serializer with snake_case conversion and enum support.
+     */
+    private function createSerializer(): Serializer
+    {
+        $propertyInfo = new PropertyInfoExtractor([new PhpDocExtractor(), new ReflectionExtractor()]);
+        $normalizers = [
+            new DateTimeNormalizer(),
+            new MyclabsEnumNormalizer(),
+            new ObjectNormalizer(null, new CamelCaseToSnakeCaseNameConverter(), null, $propertyInfo),
+        ];
+        return new Serializer($normalizers, [new JsonEncoder()]);
     }
 
    /**
