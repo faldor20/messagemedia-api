@@ -43,7 +43,8 @@ $content = 'Hello from the MessageMedia PHP SDK!';
 $authentication = new Basic($apiKey, $apiSecret);
 
 // Create client with automatic dependency discovery
-$client = new Client($authentication);
+// Optional: pass a base URI (defaults to https://api.messagemedia.com)
+$client = new Client($authentication, baseUri: 'https://api.messagemedia.com');
 
 // Create message using constructor
 $message = new Message(
@@ -102,7 +103,8 @@ $client = new Client(
     $authentication,
     $httpClient,           // PSR-18 HTTP Client
     $psr17Factory,         // PSR-17 Request Factory
-    $psr17Factory          // PSR-17 Stream Factory
+    $psr17Factory,         // PSR-17 Stream Factory
+    'https://api.messagemedia.com' // Optional base URI
 );
 
 // Create message using constructor
@@ -156,6 +158,14 @@ Use the `Hmac` class for HMAC authentication. The SDK handles the signing proces
 use Faldor20\MessagemediaApi\Authentication\Hmac;
 
 $authentication = new Hmac('YOUR_API_KEY', 'YOUR_API_SECRET');
+```
+
+## Base URI and Regions
+
+By default, the client uses `https://api.messagemedia.com` as the base URI. To target the EU region, use `https://eu.app.api.sinch.com`:
+
+```php
+$client = new Client($authentication, baseUri: 'https://eu.app.api.sinch.com');
 ```
 
 ## Implemented API Resources and Routes

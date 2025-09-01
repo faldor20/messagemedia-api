@@ -56,7 +56,10 @@ class NumberAuthorisation
     public function add(AddOneOrMoreNumbersToYourBlacklistRequest $requestBody): AddOneOrMoreNumbersToYourBlacklistResponse
     {
         $request = $this->client->getRequestFactory()->createRequest('POST', '/v1/number_authorisation/mt/blacklist');
-        $request = $request->withBody($this->client->getStreamFactory()->createStream(json_encode($requestBody)));
+        $request = $request
+        ->withHeader('Content-Type', 'application/json')
+        ->withHeader('Accept', 'application/json')
+        ->withBody($this->client->getStreamFactory()->createStream(json_encode($requestBody)));
         $response = $this->client->sendRequest($request);
         $this->client->assertExpectedResponse($response, [201, 200]);
 

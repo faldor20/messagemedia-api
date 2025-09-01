@@ -75,7 +75,10 @@ class Messages
     {
         $requestBody = new CancelScheduledMessageRequest();
         $request = $this->client->getRequestFactory()->createRequest('PUT', '/v1/messages/' . $messageId);
-        $request = $request->withBody($this->client->getStreamFactory()->createStream(json_encode($requestBody)));
+        $request = $request
+            ->withHeader('Content-Type', 'application/json')
+            ->withHeader('Accept', 'application/json')
+            ->withBody($this->client->getStreamFactory()->createStream(json_encode($requestBody)));
         $response = $this->client->sendRequest($request);
         $this->client->assertExpectedResponse($response, [200], [400, 403, 404]);
     }
@@ -93,7 +96,10 @@ class Messages
     public function send(SendMessagesRequest $messages): SendMessagesResponse
     {
         $request = $this->client->getRequestFactory()->createRequest('POST', '/v1/messages');
-        $request = $request->withBody($this->client->getStreamFactory()->createStream(json_encode($messages, JSON_FORCE_OBJECT)));
+        $request = $request
+            ->withHeader('Content-Type', 'application/json')
+            ->withHeader('Accept', 'application/json')
+            ->withBody($this->client->getStreamFactory()->createStream(json_encode($messages)));
         $response = $this->client->sendRequest($request);
         $this->client->assertExpectedResponse($response, [202], [400, 403]);
 

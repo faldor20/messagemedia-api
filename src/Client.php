@@ -4,6 +4,7 @@ namespace Faldor20\MessagemediaApi;
 
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
+use Nyholm\Psr7\Uri;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
@@ -29,6 +30,7 @@ class Client
     private Authentication $authentication;
     private RequestFactoryInterface $requestFactory;
     private StreamFactoryInterface $streamFactory;
+    private string $baseUri;
 
     /**
      * Client constructor.
@@ -45,12 +47,14 @@ class Client
         Authentication $authentication,
         ClientInterface $httpClient = null,
         RequestFactoryInterface $requestFactory = null,
-        StreamFactoryInterface $streamFactory = null
+        StreamFactoryInterface $streamFactory = null,
+        string $baseUri = 'https://api.messagemedia.com'
     ) {
         $this->authentication = $authentication;
         $this->httpClient = $httpClient ?? $this->discoverHttpClient();
         $this->requestFactory = $requestFactory ?? $this->discoverRequestFactory();
         $this->streamFactory = $streamFactory ?? $this->discoverStreamFactory();
+        $this->baseUri = $baseUri;
     }
 
     /**
@@ -62,6 +66,8 @@ class Client
      */
     public function sendRequest(RequestInterface $request): ResponseInterface
     {
+        $request = $this->ensureAbsoluteRequestUri($request);
+        $request = $this->ensureDefaultHeaders($request);
         $request = $this->authentication->authenticate($request);
         return $this->httpClient->sendRequest($request);
     }
@@ -139,6 +145,16 @@ class Client
     public function getStreamFactory(): StreamFactoryInterface
     {
         return $this->streamFactory;
+    }
+
+    /**
+     * Gets the base URI used for requests.
+     *
+     * @return string
+     */
+    public function getBaseUri(): string
+    {
+        return $this->baseUri;
     }
 
     /**
@@ -229,5 +245,56 @@ class Client
     private function discoverStreamFactory(): StreamFactoryInterface
     {
         return Psr17FactoryDiscovery::findStreamFactory();
+    }
+
+   /**
+     * Ensures the request has an absolute URI by prefixing the configured base URI
+     * when the request URI lacks a scheme/host.
+     *
+     * @param RequestInterface $request
+     * @return RequestInterface
+     */
+    private function ensureAbsoluteRequestUri(RequestInterface $request): RequestInterface
+    {
+        $uri = $request->getUri();
+        if ($uri->getScheme() !== '' && $uri->getHost() !== '') {
+            return $request;
+        }
+
+        $base = rtrim($this->baseUri, '/');
+        $path = '/' . ltrim($uri->getPath(), '/');
+        $queryString = $uri->getQuery();
+        $absolute = $base . $path . ($queryString !== '' ? ('?' . $queryString) : '');
+
+        $newRequest = $this->requestFactory->createRequest($request->getMethod(), $absolute)
+            ->withBody($request->getBody());
+            
+        foreach ($request->getHeaders() as $name => $values) {
+            $newRequest = $newRequest->withHeader($name, $values);
+        }
+
+        return $newRequest;
+    }
+
+    /**
+     * Ensures default headers are present on the request.
+     * - Adds Accept: application/json if missing
+     * - Adds Content-Type: application/json for requests with a body (POST/PUT/PATCH) if missing
+     *
+     * @param RequestInterface $request
+     * @return RequestInterface
+     */
+    private function ensureDefaultHeaders(RequestInterface $request): RequestInterface
+    {
+        if (!$request->hasHeader('Accept')) {
+            $request = $request->withHeader('Accept', 'application/json');
+        }
+
+        $method = strtoupper($request->getMethod());
+        if (in_array($method, ['POST', 'PUT', 'PATCH'], true) && !$request->hasHeader('Content-Type')) {
+            $request = $request->withHeader('Content-Type', 'application/json');
+        }
+
+        return $request;
     }
 }

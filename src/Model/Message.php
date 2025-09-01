@@ -8,7 +8,7 @@ use Faldor20\MessagemediaApi\Enum\SourceNumberType;
 /**
  * A message to be sent.
  */
-class Message
+class Message implements \JsonSerializable
 {
     /**
      * @var string|null URL replies and delivery reports to this message will be pushed to.
@@ -136,5 +136,52 @@ class Message
         }
 
         throw new \InvalidArgumentException("Invalid value for {$enumClass}: " . var_export($value, true));
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        $data = [];
+
+        if ($this->callbackUrl !== null) {
+            $data['callback_url'] = $this->callbackUrl;
+        }
+        if ($this->content !== null) {
+            $data['content'] = $this->content;
+        }
+        if ($this->destinationNumber !== null) {
+            $data['destination_number'] = $this->destinationNumber;
+        }
+        if ($this->deliveryReport !== null) {
+            $data['delivery_report'] = $this->deliveryReport;
+        }
+        if ($this->format !== null) {
+            $data['format'] = $this->format->getValue();
+        }
+        if ($this->messageExpiryTimestamp !== null) {
+            $data['message_expiry_timestamp'] = $this->messageExpiryTimestamp;
+        }
+        if ($this->metadata !== null) {
+            $data['metadata'] = $this->metadata;
+        }
+        if ($this->scheduled !== null) {
+            $data['scheduled'] = $this->scheduled;
+        }
+        if ($this->sourceNumber !== null) {
+            $data['source_number'] = $this->sourceNumber;
+        }
+        if ($this->sourceNumberType !== null) {
+            $data['source_number_type'] = $this->sourceNumberType->getValue();
+        }
+        if ($this->media !== null) {
+            $data['media'] = $this->media;
+        }
+        if ($this->subject !== null) {
+            $data['subject'] = $this->subject;
+        }
+
+        return $data;
     }
 }

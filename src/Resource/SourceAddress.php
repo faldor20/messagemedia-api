@@ -178,7 +178,10 @@ class SourceAddress
     public function updateLabel(string $id, PatchLabelMyOwnNumber $requestBody): GetSenderAddress
     {
         $request = $this->client->getRequestFactory()->createRequest('PATCH', '/v1/messaging/numbers/sender_address/addresses/' . $id);
-        $request = $request->withBody($this->client->getStreamFactory()->createStream(json_encode($requestBody)));
+        $request = $request
+        ->withHeader('Content-Type', 'application/json')
+        ->withHeader('Accept', 'application/json')
+        ->withBody($this->client->getStreamFactory()->createStream(json_encode($requestBody)));
         $response = $this->client->sendRequest($request);
         $this->client->assertExpectedResponse($response, [200], [400, 401, 403]);
 
@@ -216,7 +219,10 @@ class SourceAddress
     public function request(object $requestBody): object
     {
         $request = $this->client->getRequestFactory()->createRequest('POST', '/v1/messaging/numbers/sender_address/requests');
-        $request = $request->withBody($this->client->getStreamFactory()->createStream(json_encode($requestBody)));
+        $request = $request
+        ->withHeader('Content-Type', 'application/json')
+        ->withHeader('Accept', 'application/json')
+        ->withBody($this->client->getStreamFactory()->createStream(json_encode($requestBody)));
         $response = $this->client->sendRequest($request);
         $this->client->assertExpectedResponse($response, [201], [400, 401, 403, 409]);
 

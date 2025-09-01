@@ -2,7 +2,7 @@
 
 namespace Faldor20\MessagemediaApi\Model;
 
-class ConfirmDeliveryReportsAsReceivedRequest
+class ConfirmDeliveryReportsAsReceivedRequest implements \JsonSerializable
 {
     /** @var string[] */
     public array $deliveryReportIds = [];
@@ -12,5 +12,15 @@ class ConfirmDeliveryReportsAsReceivedRequest
      */
     public function __construct(array $deliveryReportIds) {
     	$this->deliveryReportIds = $deliveryReportIds;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'delivery_report_ids' => $this->deliveryReportIds,
+        ];
     }
 }
