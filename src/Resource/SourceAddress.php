@@ -5,6 +5,7 @@ namespace Faldor20\MessagemediaApi\Resource;
 use Faldor20\MessagemediaApi\Client;
 use Faldor20\MessagemediaApi\Enum\SenderAddressType;
 use Faldor20\MessagemediaApi\Enum\UsageType;
+use Faldor20\MessagemediaApi\Enum\ExpiryStatus;
 use Faldor20\MessagemediaApi\Model\GetAllApprovedSenderAddresses;
 use Faldor20\MessagemediaApi\Model\GetSenderAddress;
 use Faldor20\MessagemediaApi\Model\PatchLabelMyOwnNumber;
@@ -38,6 +39,11 @@ class SourceAddress
      * @param int|null $pageSize The number of results per page. Default is 20.
      * @param string|null $token In paginated data, the original request will return with a "next_token" attribute. This token must be entered into subsequent call in the "token" query parameter to obtain the next set of records.
      * @return GetAllApprovedSenderAddresses
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Faldor20\MessagemediaApi\Exception\BadRequestException
+     * @throws \Faldor20\MessagemediaApi\Exception\UnauthorizedException
+     * @throws \Faldor20\MessagemediaApi\Exception\ForbiddenException
+     * @throws \Faldor20\MessagemediaApi\Exception\UnexpectedStatusCodeException
      */
     public function getAllApproved(
         ?string $senderAddress = null,
@@ -53,16 +59,16 @@ class SourceAddress
             $query['sender_address'] = $senderAddress;
         }
         if ($senderAddressType !== null) {
-            $query['sender_address_type'] = $senderAddressType->value;
+            $query['sender_address_type'] = $senderAddressType;
         }
         if ($usageType !== null) {
-            $query['usage_type'] = $usageType->value;
+            $query['usage_type'] = $usageType;
         }
         if ($includeRelatedAccounts !== null) {
             $query['include_related_accounts'] = $includeRelatedAccounts;
         }
         if ($expiryStatus !== null) {
-            $query['expiry_status'] = $expiryStatus->value;
+            $query['expiry_status'] = $expiryStatus;
         }
         if ($pageSize !== null) {
             $query['page_size'] = $pageSize;
@@ -73,6 +79,7 @@ class SourceAddress
 
         $request = $this->client->getRequestFactory()->createRequest('GET', '/v1/messaging/numbers/sender_address/addresses/?' . http_build_query($query));
         $response = $this->client->sendRequest($request);
+        $this->client->assertExpectedResponse($response, [200], [400, 401, 403]);
 
         $data = json_decode($response->getBody()->getContents(), true);
 
@@ -105,11 +112,17 @@ class SourceAddress
      *
      * @param string $id The UUID of the sender address.
      * @return GetSenderAddress
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Faldor20\MessagemediaApi\Exception\BadRequestException
+     * @throws \Faldor20\MessagemediaApi\Exception\UnauthorizedException
+     * @throws \Faldor20\MessagemediaApi\Exception\ForbiddenException
+     * @throws \Faldor20\MessagemediaApi\Exception\UnexpectedStatusCodeException
      */
     public function get(string $id): GetSenderAddress
     {
         $request = $this->client->getRequestFactory()->createRequest('GET', '/v1/messaging/numbers/sender_address/addresses/' . $id);
         $response = $this->client->sendRequest($request);
+        $this->client->assertExpectedResponse($response, [200], [400, 401, 403]);
 
         $data = json_decode($response->getBody()->getContents(), true);
 
@@ -135,12 +148,19 @@ class SourceAddress
      *
      * @param string $id The UUID of the sender address.
      * @param string $reason A string detailing why the sender address is being removed.
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Faldor20\MessagemediaApi\Exception\BadRequestException
+     * @throws \Faldor20\MessagemediaApi\Exception\UnauthorizedException
+     * @throws \Faldor20\MessagemediaApi\Exception\ForbiddenException
+     * @throws \Faldor20\MessagemediaApi\Exception\NotFoundException
+     * @throws \Faldor20\MessagemediaApi\Exception\UnexpectedStatusCodeException
      */
     public function delete(string $id, string $reason): void
     {
         $query = ['reason' => $reason];
         $request = $this->client->getRequestFactory()->createRequest('DELETE', '/v1/messaging/numbers/sender_address/addresses/' . $id . '?' . http_build_query($query));
-        $this->client->sendRequest($request);
+        $response = $this->client->sendRequest($request);
+        $this->client->assertExpectedResponse($response, [202], [400, 401, 403, 404]);
     }
 
     /**
@@ -149,12 +169,18 @@ class SourceAddress
      * @param string $id The UUID of the sender address.
      * @param PatchLabelMyOwnNumber $requestBody
      * @return GetSenderAddress
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Faldor20\MessagemediaApi\Exception\BadRequestException
+     * @throws \Faldor20\MessagemediaApi\Exception\UnauthorizedException
+     * @throws \Faldor20\MessagemediaApi\Exception\ForbiddenException
+     * @throws \Faldor20\MessagemediaApi\Exception\UnexpectedStatusCodeException
      */
     public function updateLabel(string $id, PatchLabelMyOwnNumber $requestBody): GetSenderAddress
     {
         $request = $this->client->getRequestFactory()->createRequest('PATCH', '/v1/messaging/numbers/sender_address/addresses/' . $id);
         $request = $request->withBody($this->client->getStreamFactory()->createStream(json_encode($requestBody)));
         $response = $this->client->sendRequest($request);
+        $this->client->assertExpectedResponse($response, [200], [400, 401, 403]);
 
         $data = json_decode($response->getBody()->getContents(), true);
 
@@ -180,12 +206,19 @@ class SourceAddress
      *
      * @param RequestAlphaTag|RequestVerificationCode $requestBody
      * @return AlphaTagRequestItem|VerificationCodeRequestItem
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Faldor20\MessagemediaApi\Exception\BadRequestException
+     * @throws \Faldor20\MessagemediaApi\Exception\UnauthorizedException
+     * @throws \Faldor20\MessagemediaApi\Exception\ForbiddenException
+     * @throws \Faldor20\MessagemediaApi\Exception\ConflictException
+     * @throws \Faldor20\MessagemediaApi\Exception\UnexpectedStatusCodeException
      */
     public function request(object $requestBody): object
     {
         $request = $this->client->getRequestFactory()->createRequest('POST', '/v1/messaging/numbers/sender_address/requests');
         $request = $request->withBody($this->client->getStreamFactory()->createStream(json_encode($requestBody)));
         $response = $this->client->sendRequest($request);
+        $this->client->assertExpectedResponse($response, [201], [400, 401, 403, 409]);
 
         $data = json_decode($response->getBody()->getContents(), true);
 
@@ -216,12 +249,19 @@ class SourceAddress
      * @param string $id The UUID of the request.
      * @param PostVerificationCode $requestBody
      * @return VerificationCodeRequestItem
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Faldor20\MessagemediaApi\Exception\BadRequestException
+     * @throws \Faldor20\MessagemediaApi\Exception\UnauthorizedException
+     * @throws \Faldor20\MessagemediaApi\Exception\ForbiddenException
+     * @throws \Faldor20\MessagemediaApi\Exception\NotFoundException
+     * @throws \Faldor20\MessagemediaApi\Exception\UnexpectedStatusCodeException
      */
     public function verify(string $id, PostVerificationCode $requestBody): VerificationCodeRequestItem
     {
         $request = $this->client->getRequestFactory()->createRequest('POST', '/v1/messaging/numbers/sender_address/requests/' . $id . '/verify');
         $request = $request->withBody($this->client->getStreamFactory()->createStream(json_encode($requestBody)));
         $response = $this->client->sendRequest($request);
+        $this->client->assertExpectedResponse($response, [201], [400, 401, 403, 404]);
 
         $data = json_decode($response->getBody()->getContents(), true);
 
@@ -246,11 +286,18 @@ class SourceAddress
      *
      * @param string $id Sender Address ID.
      * @return ReVerifySenderAddressRequestItem
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Faldor20\MessagemediaApi\Exception\BadRequestException
+     * @throws \Faldor20\MessagemediaApi\Exception\UnauthorizedException
+     * @throws \Faldor20\MessagemediaApi\Exception\ForbiddenException
+     * @throws \Faldor20\MessagemediaApi\Exception\NotFoundException
+     * @throws \Faldor20\MessagemediaApi\Exception\UnexpectedStatusCodeException
      */
     public function reverify(string $id): ReVerifySenderAddressRequestItem
     {
         $request = $this->client->getRequestFactory()->createRequest('POST', '/v1/messaging/numbers/sender_address/addresses/' . $id . '/reverify');
         $response = $this->client->sendRequest($request);
+        $this->client->assertExpectedResponse($response, [200], [400, 401, 403, 404]);
 
         $data = json_decode($response->getBody()->getContents(), true);
 
@@ -275,11 +322,18 @@ class SourceAddress
      *
      * @param string $id 36 character UUID.
      * @return AlphaTagRequestItem
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Faldor20\MessagemediaApi\Exception\BadRequestException
+     * @throws \Faldor20\MessagemediaApi\Exception\UnauthorizedException
+     * @throws \Faldor20\MessagemediaApi\Exception\ForbiddenException
+     * @throws \Faldor20\MessagemediaApi\Exception\NotFoundException
+     * @throws \Faldor20\MessagemediaApi\Exception\UnexpectedStatusCodeException
      */
     public function getStatus(string $id): AlphaTagRequestItem
     {
         $request = $this->client->getRequestFactory()->createRequest('GET', '/v1/messaging/numbers/sender_address/requests/' . $id);
         $response = $this->client->sendRequest($request);
+        $this->client->assertExpectedResponse($response, [200], [400, 401, 403, 404]);
 
         $data = json_decode($response->getBody()->getContents(), true);
 

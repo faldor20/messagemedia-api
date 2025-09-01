@@ -26,11 +26,15 @@ class NumberAuthorisation
      * This endpoint returns a list of 100 numbers that are on the blacklist. There is a pagination token to retrieve the next 100 numbers.
      *
      * @return GetNumberAuthorisationBlacklistResponse
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Faldor20\MessagemediaApi\Exception\ForbiddenException
+     * @throws \Faldor20\MessagemediaApi\Exception\UnexpectedStatusCodeException
      */
     public function listAllBlocked(): GetNumberAuthorisationBlacklistResponse
     {
         $request = $this->client->getRequestFactory()->createRequest('GET', '/v1/number_authorisation/mt/blacklist');
         $response = $this->client->sendRequest($request);
+        $this->client->assertExpectedResponse($response, [200], [403]);
 
         $data = json_decode($response->getBody()->getContents(), true);
 
@@ -47,12 +51,15 @@ class NumberAuthorisation
      *
      * @param AddOneOrMoreNumbersToYourBlacklistRequest $requestBody
      * @return AddOneOrMoreNumbersToYourBlacklistResponse
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Faldor20\MessagemediaApi\Exception\UnexpectedStatusCodeException
      */
     public function add(AddOneOrMoreNumbersToYourBlacklistRequest $requestBody): AddOneOrMoreNumbersToYourBlacklistResponse
     {
         $request = $this->client->getRequestFactory()->createRequest('POST', '/v1/number_authorisation/mt/blacklist');
         $request = $request->withBody($this->client->getStreamFactory()->createStream(json_encode($requestBody)));
         $response = $this->client->sendRequest($request);
+        $this->client->assertExpectedResponse($response, [201, 200]);
 
         $data = json_decode($response->getBody()->getContents(), true);
 
@@ -67,11 +74,15 @@ class NumberAuthorisation
      * This endpoint allows you to remove a number from the blacklist. Only one number can be deleted per request.
      *
      * @param string $number A number in international format e.g. ```+61491570156```
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Faldor20\MessagemediaApi\Exception\NotFoundException
+     * @throws \Faldor20\MessagemediaApi\Exception\UnexpectedStatusCodeException
      */
     public function remove(string $number): void
     {
         $request = $this->client->getRequestFactory()->createRequest('DELETE', '/v1/number_authorisation/mt/blacklist/' . $number);
-        $this->client->sendRequest($request);
+        $response = $this->client->sendRequest($request);
+        $this->client->assertExpectedResponse($response, [200], [404]);
     }
 
     /**
@@ -79,11 +90,14 @@ class NumberAuthorisation
      *
      * @param string[] $numbers One or more numbers in international format.
      * @return CheckIfOneOrSeveralNumbersAreCurrentlyBlacklistedResponse
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Faldor20\MessagemediaApi\Exception\UnexpectedStatusCodeException
      */
     public function isAuthorised(array $numbers): CheckIfOneOrSeveralNumbersAreCurrentlyBlacklistedResponse
     {
         $request = $this->client->getRequestFactory()->createRequest('GET', '/v1/number_authorisation/is_authorised/' . implode(',', $numbers));
         $response = $this->client->sendRequest($request);
+        $this->client->assertExpectedResponse($response, [200]);
 
         $data = json_decode($response->getBody()->getContents(), true);
 

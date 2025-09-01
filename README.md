@@ -56,8 +56,10 @@ $sendMessagesRequest->messages = [$message];
 try {
     $response = $client->messages()->send($sendMessagesRequest);
     echo "Message sent successfully! Message ID: " . $response->messages[0]->messageId . "\n";
-} catch (Exception $e) {
-    echo 'Error sending message: ' . $e->getMessage() . "\n";
+} catch (\Psr\Http\Client\ClientExceptionInterface $e) {
+    echo 'HTTP client error: ' . $e->getMessage() . "\n";
+} catch (\Faldor20\MessagemediaApi\Exception\ApiException $e) {
+    echo 'API error: ' . $e->getMessage() . "\n";
 }
 ```
 
@@ -112,8 +114,10 @@ $sendMessagesRequest->messages = [$message];
 try {
     $response = $client->messages()->send($sendMessagesRequest);
     echo "Message sent successfully! Message ID: " . $response->messages[0]->messageId . "\n";
-} catch (Exception $e) {
-    echo 'Error sending message: ' . $e->getMessage() . "\n";
+} catch (\Psr\Http\Client\ClientExceptionInterface $e) {
+    echo 'HTTP client error: ' . $e->getMessage() . "\n";
+} catch (\Faldor20\MessagemediaApi\Exception\ApiException $e) {
+    echo 'API error: ' . $e->getMessage() . "\n";
 }
 ```
 
@@ -193,6 +197,19 @@ The SDK provides access to the following MessageMedia API resources, with their 
 *   `getNumbers(...$params)`: `GET /v1/messaging/numbers/dedicated/` - Get a list of available dedicated numbers, with optional filters.
 *   `getNumberById(string $id)`: `GET /v1/messaging/numbers/dedicated/{id}` - Get details about a specific dedicated number.
 *   `getAssignment(string $numberId)`: `GET /v1/messaging/numbers/dedicated/{numberId}/assignment` - View details of a dedicated number's assignment.
+
+## Exceptions
+
+All methods can throw:
+
+- `Psr\\Http\\Client\\ClientExceptionInterface` for transport-level errors from any PSR-18 HTTP client.
+- Documented API exceptions based on the OpenAPI spec:
+  - `Faldor20\\MessagemediaApi\\Exception\\BadRequestException` (400)
+  - `Faldor20\\MessagemediaApi\\Exception\\UnauthorizedException` (401)
+  - `Faldor20\\MessagemediaApi\\Exception\\ForbiddenException` (403)
+  - `Faldor20\\MessagemediaApi\\Exception\\NotFoundException` (404)
+  - `Faldor20\\MessagemediaApi\\Exception\\ConflictException` (409)
+- `Faldor20\\MessagemediaApi\\Exception\\UnexpectedStatusCodeException` for any other non-success status codes not explicitly documented for the endpoint.
 
 ## Contributing
 

@@ -31,11 +31,16 @@ class Replies
      * It is recommended to use the Webhooks feature to receive reply messages rather than polling this endpoint.
      *
      * @return CheckRepliesResponse
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Faldor20\MessagemediaApi\Exception\ForbiddenException
+     * @throws \Faldor20\MessagemediaApi\Exception\NotFoundException
+     * @throws \Faldor20\MessagemediaApi\Exception\UnexpectedStatusCodeException
      */
     public function check(): CheckRepliesResponse
     {
         $request = $this->client->getRequestFactory()->createRequest('GET', '/v1/replies');
         $response = $this->client->sendRequest($request);
+        $this->client->assertExpectedResponse($response, [200], [403, 404]);
 
         $data = json_decode($response->getBody()->getContents(), true);
 
@@ -66,12 +71,17 @@ class Replies
      * they can then be confirmed using this endpoint so they are no longer returned in subsequent check replies requests.
      *
      * @param ConfirmRepliesAsReceivedRequest $requestBody
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Faldor20\MessagemediaApi\Exception\BadRequestException
+     * @throws \Faldor20\MessagemediaApi\Exception\ForbiddenException
+     * @throws \Faldor20\MessagemediaApi\Exception\NotFoundException
+     * @throws \Faldor20\MessagemediaApi\Exception\UnexpectedStatusCodeException
      */
     public function confirm(ConfirmRepliesAsReceivedRequest $requestBody): void
     {
         $request = $this->client->getRequestFactory()->createRequest('POST', '/v1/replies/confirmed');
         $request = $request->withBody($this->client->getStreamFactory()->createStream(json_encode($requestBody)));
-
-        $this->client->sendRequest($request);
+        $response = $this->client->sendRequest($request);
+        $this->client->assertExpectedResponse($response, [202], [400, 403, 404]);
     }
 }

@@ -10,6 +10,13 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Faldor20\MessagemediaApi\Authentication\Authentication;
+use Faldor20\MessagemediaApi\Exception\ApiException;
+use Faldor20\MessagemediaApi\Exception\BadRequestException;
+use Faldor20\MessagemediaApi\Exception\UnauthorizedException;
+use Faldor20\MessagemediaApi\Exception\ForbiddenException;
+use Faldor20\MessagemediaApi\Exception\ConflictException;
+use Faldor20\MessagemediaApi\Exception\NotFoundException;
+use Faldor20\MessagemediaApi\Exception\UnexpectedStatusCodeException;
 
 /**
  * The main client for interacting with the MessageMedia API.
@@ -51,11 +58,67 @@ class Client
      *
      * @param RequestInterface $request The request to send.
      * @return ResponseInterface The response from the API.
+     * @throws \Psr\Http\Client\ClientExceptionInterface If the underlying HTTP client fails to send the request.
      */
     public function sendRequest(RequestInterface $request): ResponseInterface
     {
         $request = $this->authentication->authenticate($request);
         return $this->httpClient->sendRequest($request);
+    }
+
+    /**
+     * Validates a response against expected success codes and throws documented exceptions.
+     *
+     * All other unexpected 4xx/5xx codes will throw UnexpectedStatusCodeException.
+     *
+     * @param ResponseInterface $response
+     * @param int[] $expectedSuccessCodes
+     * @throws BadRequestException
+     * @throws UnauthorizedException
+     * @throws ForbiddenException
+     * @throws ConflictException
+     * @throws NotFoundException
+     * @throws UnexpectedStatusCodeException
+     * @return void
+     */
+    public function assertExpectedResponse(ResponseInterface $response, array $expectedSuccessCodes, array $documentedErrorCodes = []): void
+    {
+        $statusCode = $response->getStatusCode();
+        if (in_array($statusCode, $expectedSuccessCodes, true)) {
+            return;
+        }
+
+        $bodyString = (string) $response->getBody();
+        $decoded = null;
+        if ($bodyString !== '') {
+            $decoded = json_decode($bodyString, true);
+        }
+
+        $isDocumented = in_array($statusCode, $documentedErrorCodes, true);
+        if ($isDocumented) {
+            $messageFromBody = null;
+            if (is_array($decoded) && isset($decoded['message']) && is_string($decoded['message'])) {
+                $messageFromBody = $decoded['message'];
+            }
+            switch ($statusCode) {
+                case 400:
+                    throw new BadRequestException($messageFromBody ?? 'Bad Request', 400, $response, is_array($decoded) ? $decoded : null);
+                case 401:
+                    throw new UnauthorizedException($messageFromBody ?? 'Unauthorized', 401, $response, is_array($decoded) ? $decoded : null);
+                case 403:
+                    throw new ForbiddenException($messageFromBody ?? 'Forbidden', 403, $response, is_array($decoded) ? $decoded : null);
+                case 404:
+                    throw new NotFoundException($messageFromBody ?? 'Not Found', 404, $response, is_array($decoded) ? $decoded : null);
+                case 409:
+                    throw new ConflictException($messageFromBody ?? 'Conflict', 409, $response, is_array($decoded) ? $decoded : null);
+            }
+        }
+
+        $messageFromBody = null;
+        if (is_array($decoded) && isset($decoded['message']) && is_string($decoded['message'])) {
+            $messageFromBody = $decoded['message'];
+        }
+        throw new UnexpectedStatusCodeException(($messageFromBody ?? ('Unexpected status code: ' . $statusCode)), $statusCode, $response, is_array($decoded) ? $decoded : null);
     }
 
     /**

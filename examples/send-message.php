@@ -27,8 +27,8 @@ $psr17Factory = new Psr17Factory();
 $authentication = new Basic($apiKey, $apiSecret);
 
 $client = new Client(
-    $httpClient,
     $authentication,
+    $httpClient,
     $psr17Factory,
     $psr17Factory
 );

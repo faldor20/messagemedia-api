@@ -33,6 +33,9 @@ class DedicatedNumbers
      * @param Capability[]|null $serviceTypes Filter results to include numbers with certain capabilities.
      * @param string|null $token In paginated data the original request will return with a "next_token" attribute. This token must be entered into subsequent call in the "token" query parameter to obtain the next set of records.
      * @return NumbersListResponse
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Faldor20\MessagemediaApi\Exception\ForbiddenException
+     * @throws \Faldor20\MessagemediaApi\Exception\UnexpectedStatusCodeException
      */
     public function getNumbers(
         ?string $country = null,
@@ -52,7 +55,7 @@ class DedicatedNumbers
             $query['page_size'] = $pageSize;
         }
         if ($serviceTypes !== null) {
-            $query['service_types'] = implode(',', array_map(fn(Capability $type) => $type->value, $serviceTypes));
+            $query['service_types'] = implode(',', array_map(fn(Capability $type) => $type, $serviceTypes));
         }
         if ($token !== null) {
             $query['token'] = $token;
@@ -60,6 +63,7 @@ class DedicatedNumbers
 
         $request = $this->client->getRequestFactory()->createRequest('GET', '/v1/messaging/numbers/dedicated/?' . http_build_query($query));
         $response = $this->client->sendRequest($request);
+        $this->client->assertExpectedResponse($response, [200], [403]);
 
         $data = json_decode($response->getBody()->getContents(), true);
 
@@ -86,11 +90,16 @@ class DedicatedNumbers
      *
      * @param string $id Unique identifier.
      * @return DedicatedNumber
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Faldor20\MessagemediaApi\Exception\ForbiddenException
+     * @throws \Faldor20\MessagemediaApi\Exception\NotFoundException
+     * @throws \Faldor20\MessagemediaApi\Exception\UnexpectedStatusCodeException
      */
     public function getNumberById(string $id): DedicatedNumber
     {
         $request = $this->client->getRequestFactory()->createRequest('GET', '/v1/messaging/numbers/dedicated/' . $id);
         $response = $this->client->sendRequest($request);
+        $this->client->assertExpectedResponse($response, [200], [403, 404]);
 
         $data = json_decode($response->getBody()->getContents(), true);
 
@@ -111,11 +120,16 @@ class DedicatedNumbers
      *
      * @param string $numberId Unique identifier.
      * @return Assignment
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Faldor20\MessagemediaApi\Exception\ForbiddenException
+     * @throws \Faldor20\MessagemediaApi\Exception\NotFoundException
+     * @throws \Faldor20\MessagemediaApi\Exception\UnexpectedStatusCodeException
      */
     public function getAssignment(string $numberId): Assignment
     {
         $request = $this->client->getRequestFactory()->createRequest('GET', '/v1/messaging/numbers/dedicated/' . $numberId . '/assignment');
         $response = $this->client->sendRequest($request);
+        $this->client->assertExpectedResponse($response, [200], [403, 404]);
 
         $data = json_decode($response->getBody()->getContents(), true);
 

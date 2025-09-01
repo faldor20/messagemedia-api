@@ -31,11 +31,16 @@ class DeliveryReports
      * It is recommended to use Webhooks to receive delivery reports rather than polling this endpoint.
      *
      * @return CheckDeliveryReportsResponse
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Faldor20\MessagemediaApi\Exception\ForbiddenException
+     * @throws \Faldor20\MessagemediaApi\Exception\NotFoundException
+     * @throws \Faldor20\MessagemediaApi\Exception\UnexpectedStatusCodeException
      */
     public function check(): CheckDeliveryReportsResponse
     {
         $request = $this->client->getRequestFactory()->createRequest('GET', '/v1/delivery_reports');
         $response = $this->client->sendRequest($request);
+        $this->client->assertExpectedResponse($response, [200], [403, 404]);
 
         $data = json_decode($response->getBody()->getContents(), true);
 
@@ -69,12 +74,17 @@ class DeliveryReports
      * using this endpoint so they are no longer returned in subsequent check delivery reports requests.
      *
      * @param ConfirmDeliveryReportsAsReceivedRequest $requestBody
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Faldor20\MessagemediaApi\Exception\BadRequestException
+     * @throws \Faldor20\MessagemediaApi\Exception\ForbiddenException
+     * @throws \Faldor20\MessagemediaApi\Exception\NotFoundException
+     * @throws \Faldor20\MessagemediaApi\Exception\UnexpectedStatusCodeException
      */
     public function confirm(ConfirmDeliveryReportsAsReceivedRequest $requestBody): void
     {
         $request = $this->client->getRequestFactory()->createRequest('POST', '/v1/delivery_reports/confirmed');
         $request = $request->withBody($this->client->getStreamFactory()->createStream(json_encode($requestBody)));
-
-        $this->client->sendRequest($request);
+        $response = $this->client->sendRequest($request);
+        $this->client->assertExpectedResponse($response, [202], [400, 403, 404]);
     }
 }
