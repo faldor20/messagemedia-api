@@ -2,28 +2,35 @@
 
 namespace Faldor20\MessagemediaApi\Enum;
 
+use MyCLabs\Enum\Enum;
+
 /**
  * The types of a dedicated number.
+ *
+ * @method static Types MOBILE()
+ * @method static Types LANDLINE()
+ * @method static Types TOLL_FREE()
+ * @method static Types SHORT_CODE()
  */
-class Types extends AbstractEnum
+final class Types extends Enum
 {
     /**
      * Mobile number.
      */
-    public const MOBILE = 'MOBILE';
+    private const MOBILE = 'MOBILE';
 
     /**
      * Landline number.
      */
-    public const LANDLINE = 'LANDLINE';
+    private const LANDLINE = 'LANDLINE';
 
     /**
      * Toll-free number.
      */
-    public const TOLL_FREE = 'TOLL_FREE';
+    private const TOLL_FREE = 'TOLL_FREE';
 
     /**
      * Short code number.
      */
-    public const SHORT_CODE = 'SHORT_CODE';
+    private const SHORT_CODE = 'SHORT_CODE';
 }

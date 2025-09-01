@@ -2,18 +2,23 @@
 
 namespace Faldor20\MessagemediaApi\Enum;
 
+use MyCLabs\Enum\Enum;
+
 /**
  * The type of sender address.
+ *
+ * @method static SenderAddressType ALPHANUMERIC()
+ * @method static SenderAddressType INTERNATIONAL()
  */
-class SenderAddressType extends AbstractEnum
+final class SenderAddressType extends Enum
 {
     /**
      * An alphanumeric sender ID.
      */
-    public const ALPHANUMERIC = 'ALPHANUMERIC';
+    private const ALPHANUMERIC = 'ALPHANUMERIC';
 
     /**
      * An international number.
      */
-    public const INTERNATIONAL = 'INTERNATIONAL';
+    private const INTERNATIONAL = 'INTERNATIONAL';
 }

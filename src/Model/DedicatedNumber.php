@@ -45,4 +45,57 @@ class DedicatedNumber
      * @var Type|null The type of the number.
      */
     public ?Type $type = null;
+
+    /**
+     * DedicatedNumber constructor.
+     *
+     * @param string|null $availableAfter The date and time after which the number is available
+     * @param Capability[] $capabilities The capabilities of the number
+     * @param Classification|string|null $classification The classification of the number (enum instance or string)
+     * @param string|null $country The country of the number
+     * @param string|null $id The ID of the number
+     * @param string|null $phoneNumber The phone number
+     * @param Type|string|null $type The type of the number (enum instance or string)
+     */
+    public function __construct(
+        ?string $availableAfter = null,
+        array $capabilities = [],
+        $classification = null,
+        ?string $country = null,
+        ?string $id = null,
+        ?string $phoneNumber = null,
+        $type = null
+    ) {
+        $this->availableAfter = $availableAfter;
+        $this->capabilities = $capabilities;
+        $this->classification = $this->normalizeEnum($classification, Classification::class);
+        $this->country = $country;
+        $this->id = $id;
+        $this->phoneNumber = $phoneNumber;
+        $this->type = $this->normalizeEnum($type, Type::class);
+    }
+
+    /**
+     * Normalize enum value - accepts either enum instance or string and returns enum instance
+     *
+     * @param mixed $value
+     * @param string $enumClass
+     * @return mixed|null
+     */
+    private function normalizeEnum($value, string $enumClass)
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        if ($value instanceof $enumClass) {
+            return $value;
+        }
+
+        if (is_string($value)) {
+            return $enumClass::from($value);
+        }
+
+        throw new \InvalidArgumentException("Invalid value for {$enumClass}: " . var_export($value, true));
+    }
 }

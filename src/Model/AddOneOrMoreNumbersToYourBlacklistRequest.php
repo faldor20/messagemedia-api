@@ -9,4 +9,11 @@ class AddOneOrMoreNumbersToYourBlacklistRequest
 {
     /** @var string[] */
     public array $numbers = [];
+
+    /**
+     * @param array $numbers
+     */
+    public function __construct(array $numbers) {
+    	$this->numbers = $numbers;
+    }
 }

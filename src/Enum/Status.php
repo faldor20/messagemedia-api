@@ -2,53 +2,65 @@
 
 namespace Faldor20\MessagemediaApi\Enum;
 
+use MyCLabs\Enum\Enum;
+
 /**
  * The status of the message.
+ *
+ * @method static Status ENROUTE()
+ * @method static Status SUBMITTED()
+ * @method static Status DELIVERED()
+ * @method static Status EXPIRED()
+ * @method static Status REJECTED()
+ * @method static Status UNDELIVERABLE()
+ * @method static Status QUEUED()
+ * @method static Status CANCELLED()
+ * @method static Status SCHEDULED()
  */
-class Status extends AbstractEnum
+final class Status extends Enum
 {
     /**
      * The message is in transit to the carrier.
      */
-    public const ENROUTE = 'enroute';
+    private const ENROUTE = 'enroute';
 
     /**
      * The message has been submitted to the carrier for delivery.
      */
-    public const SUBMITTED = 'submitted';
+    private const SUBMITTED = 'submitted';
 
     /**
      * The message has been delivered to the handset.
      */
-    public const DELIVERED = 'delivered';
+    private const DELIVERED = 'delivered';
 
     /**
      * The message has expired and was not delivered.
      */
-    public const EXPIRED = 'expired';
+    private const EXPIRED = 'expired';
 
     /**
      * The message was rejected by the carrier.
      */
-    public const REJECTED = 'rejected';
+    private const REJECTED = 'rejected';
 
     /**
      * The message could not be delivered to the handset.
      */
-    public const UNDELIVERABLE = 'undeliverable';
+    private const UNDELIVERABLE = 'undeliverable';
 
     /**
      * The message is queued for delivery.
      */
-    public const QUEUED = 'queued';
+    private const QUEUED = 'queued';
 
     /**
      * The message was cancelled.
      */
-    public const CANCELLED = 'cancelled';
+    private const CANCELLED = 'cancelled';
 
     /**
      * The message is scheduled for delivery.
      */
-    public const SCHEDULED = 'scheduled';
+    private const SCHEDULED = 'scheduled';
 }

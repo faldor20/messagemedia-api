@@ -2,18 +2,23 @@
 
 namespace Faldor20\MessagemediaApi\Enum;
 
+use MyCLabs\Enum\Enum;
+
 /**
  * The expiry status of a sender address.
+ *
+ * @method static ExpiryStatus EXPIRED()
+ * @method static ExpiryStatus EXPIRING()
  */
-class ExpiryStatus extends AbstractEnum
+final class ExpiryStatus extends Enum
 {
     /**
      * The sender address has expired.
      */
-    public const EXPIRED = 'EXPIRED';
+    private const EXPIRED = 'EXPIRED';
 
     /**
      * The sender address is expiring soon.
      */
-    public const EXPIRING = 'EXPIRING';
+    private const EXPIRING = 'EXPIRING';
 }

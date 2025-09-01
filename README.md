@@ -45,13 +45,15 @@ $authentication = new Basic($apiKey, $apiSecret);
 // Create client with automatic dependency discovery
 $client = new Client($authentication);
 
-$message = new Message();
-$message->destinationNumber = $destinationNumber;
-$message->content = $content;
-$message->format = Format::SMS; // Or other formats like Format::MMS, Format::TTS
+// Create message using constructor
+$message = new Message(
+    $content,
+    $destinationNumber,
+    Format::SMS()
+);
 
-$sendMessagesRequest = new SendMessagesRequest();
-$sendMessagesRequest->messages = [$message];
+// Create send request using constructor
+$sendMessagesRequest = new SendMessagesRequest([$message]);
 
 try {
     $response = $client->messages()->send($sendMessagesRequest);
@@ -103,13 +105,15 @@ $client = new Client(
     $psr17Factory          // PSR-17 Stream Factory
 );
 
-$message = new Message();
-$message->destinationNumber = $destinationNumber;
-$message->content = $content;
-$message->format = Format::SMS; // Or other formats like Format::MMS, Format::TTS
+// Create message using constructor
+$message = new Message(
+    $content,
+    $destinationNumber,
+    Format::SMS()
+);
 
-$sendMessagesRequest = new SendMessagesRequest();
-$sendMessagesRequest->messages = [$message];
+// Create send request using constructor
+$sendMessagesRequest = new SendMessagesRequest([$message]);
 
 try {
     $response = $client->messages()->send($sendMessagesRequest);

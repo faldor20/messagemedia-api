@@ -9,4 +9,11 @@ class CheckRepliesResponse
 {
     /** @var Reply[] */
     public array $replies = [];
+
+    /**
+     * @param array $replies
+     */
+    public function __construct(array $replies) {
+    	$this->replies = $replies;
+    }
 }

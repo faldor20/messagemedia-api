@@ -16,4 +16,13 @@ class AddOneOrMoreNumbersToYourBlacklistResponse
      * @var string[]
      */
     public array $numbers = [];
+
+    /**
+     * @param  $uri
+     * @param array $numbers
+     */
+    public function __construct(?string $uri, array $numbers) {
+    	$this->uri = $uri;
+    	$this->numbers = $numbers;
+    }
 }

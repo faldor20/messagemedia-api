@@ -44,7 +44,7 @@ class Replies
 
         $data = json_decode($response->getBody()->getContents(), true);
 
-        $checkRepliesResponse = new CheckRepliesResponse();
+        $replies = [];
 
         foreach ($data['replies'] as $replyData) {
             $reply = new Reply();
@@ -57,10 +57,10 @@ class Replies
             $reply->replyId = $replyData['reply_id'] ?? null;
             $reply->sourceNumber = $replyData['source_number'] ?? null;
             $reply->vendorAccountId = $replyData['vendor_account_id'] ?? null;
-            $checkRepliesResponse->replies[] = $reply;
+            $replies[] = $reply;
         }
 
-        return $checkRepliesResponse;
+        return new CheckRepliesResponse($replies);
     }
 
     /**

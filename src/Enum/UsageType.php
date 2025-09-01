@@ -2,23 +2,29 @@
 
 namespace Faldor20\MessagemediaApi\Enum;
 
+use MyCLabs\Enum\Enum;
+
 /**
  * The usage type of the Sender ID.
+ *
+ * @method static UsageType ALPHANUMERIC()
+ * @method static UsageType OWN_NUMBER()
+ * @method static UsageType DEDICATED()
  */
-class UsageType extends AbstractEnum
+final class UsageType extends Enum
 {
     /**
      * Alphanumeric sender ID.
      */
-    public const ALPHANUMERIC = 'ALPHANUMERIC';
+    private const ALPHANUMERIC = 'ALPHANUMERIC';
 
     /**
      * Own number sender ID.
      */
-    public const OWN_NUMBER = 'OWN_NUMBER';
+    private const OWN_NUMBER = 'OWN_NUMBER';
 
     /**
      * Dedicated number sender ID.
      */
-    public const DEDICATED = 'DEDICATED';
+    private const DEDICATED = 'DEDICATED';
 }

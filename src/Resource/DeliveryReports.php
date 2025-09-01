@@ -44,8 +44,7 @@ class DeliveryReports
 
         $data = json_decode($response->getBody()->getContents(), true);
 
-        $checkDeliveryReportsResponse = new CheckDeliveryReportsResponse();
-
+        $deliveryReports = [];
         foreach ($data['delivery_reports'] as $reportData) {
             $deliveryReport = new DeliveryReport();
             $deliveryReport->callbackUrl = $reportData['callback_url'] ?? null;
@@ -59,8 +58,10 @@ class DeliveryReports
             $deliveryReport->messageId = $reportData['message_id'] ?? null;
             $deliveryReport->vendorAccountId = $reportData['vendor_account_id'] ?? null;
             $deliveryReport->metadata = $reportData['metadata'] ?? null;
-            $checkDeliveryReportsResponse->deliveryReports[] = $deliveryReport;
+            $deliveryReports[] = $deliveryReport;
         }
+        $checkDeliveryReportsResponse = new CheckDeliveryReportsResponse($deliveryReports);
+
 
         return $checkDeliveryReportsResponse;
     }

@@ -9,4 +9,11 @@ class ConfirmRepliesAsReceivedRequest
 {
     /** @var string[] */
     public array $replyIds = [];
+
+    /**
+     * @param array $replyIds
+     */
+    public function __construct(array $replyIds) {
+    	$this->replyIds = $replyIds;
+    }
 }

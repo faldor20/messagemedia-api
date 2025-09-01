@@ -2,23 +2,29 @@
 
 namespace Faldor20\MessagemediaApi\Enum;
 
+use MyCLabs\Enum\Enum;
+
 /**
  * Type of source address specified.
+ *
+ * @method static SourceNumberType INTERNATIONAL()
+ * @method static SourceNumberType ALPHANUMERIC()
+ * @method static SourceNumberType SHORTCODE()
  */
-class SourceNumberType extends AbstractEnum
+final class SourceNumberType extends Enum
 {
     /**
      * An international number.
      */
-    public const INTERNATIONAL = 'INTERNATIONAL';
+    private const INTERNATIONAL = 'INTERNATIONAL';
 
     /**
      * An alphanumeric sender ID.
      */
-    public const ALPHANUMERIC = 'ALPHANUMERIC';
+    private const ALPHANUMERIC = 'ALPHANUMERIC';
 
     /**
      * A short code.
      */
-    public const SHORTCODE = 'SHORTCODE';
+    private const SHORTCODE = 'SHORTCODE';
 }

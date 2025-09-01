@@ -61,4 +61,45 @@ class DeliveryReport
      * @var array|null Any metadata that was included in the original submit message request.
      */
     public ?array $metadata = null;
+
+    /**
+     * DeliveryReport constructor.
+     *
+     * @param string|null $callbackUrl The URL specified as the callback URL in the original submit message request
+     * @param string|null $deliveryReportId Unique ID for this delivery report
+     * @param string|null $sourceNumber Address from which this delivery report was received
+     * @param string|null $dateReceived The date and time at which this delivery report was generated in UTC
+     * @param string|null $status The status of the message
+     * @param int|null $delay Deprecated, no longer in use
+     * @param string|null $submittedDate The date and time when the message status changed in UTC
+     * @param string|null $originalText Text of the original message
+     * @param string|null $messageId Unique ID of the original message
+     * @param array|null $vendorAccountId The account used to submit the original message
+     * @param array|null $metadata Any metadata that was included in the original submit message request
+     */
+    public function __construct(
+        ?string $callbackUrl = null,
+        ?string $deliveryReportId = null,
+        ?string $sourceNumber = null,
+        ?string $dateReceived = null,
+        ?string $status = null,
+        ?int $delay = null,
+        ?string $submittedDate = null,
+        ?string $originalText = null,
+        ?string $messageId = null,
+        ?array $vendorAccountId = null,
+        ?array $metadata = null
+    ) {
+        $this->callbackUrl = $callbackUrl;
+        $this->deliveryReportId = $deliveryReportId;
+        $this->sourceNumber = $sourceNumber;
+        $this->dateReceived = $dateReceived;
+        $this->status = $status;
+        $this->delay = $delay;
+        $this->submittedDate = $submittedDate;
+        $this->originalText = $originalText;
+        $this->messageId = $messageId;
+        $this->vendorAccountId = $vendorAccountId;
+        $this->metadata = $metadata;
+    }
 }

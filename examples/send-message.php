@@ -33,13 +33,15 @@ $client = new Client(
     $psr17Factory
 );
 
-$message = new Message();
-$message->destinationNumber = $destinationNumber;
-$message->content = $content;
-$message->format = Format::SMS;
+// Create message using constructor
+$message = new Message(
+    $content,
+    $destinationNumber,
+    Format::SMS()
+);
 
-$sendMessagesRequest = new SendMessagesRequest();
-$sendMessagesRequest->messages = [$message];
+// Create send request using constructor
+$sendMessagesRequest = new SendMessagesRequest([$message]);
 
 try {
     $response = $client->messages()->send($sendMessagesRequest);

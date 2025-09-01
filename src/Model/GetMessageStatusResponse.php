@@ -66,4 +66,48 @@ class GetMessageStatusResponse
      * @var string|null The status of the message.
      */
     public ?string $status = null;
+
+    /**
+     * GetMessageStatusResponse constructor.
+     *
+     * @param string|null $format The format of the message
+     * @param string|null $content Content of the message
+     * @param array|null $metadata Metadata for the message
+     * @param string|null $messageId Unique ID of this message
+     * @param string|null $callbackUrl URL for replies and delivery reports
+     * @param bool|null $deliveryReport Request a delivery report for this message
+     * @param string|null $destinationNumber Destination number of the message
+     * @param string|null $scheduled Scheduled delivery date time of the message
+     * @param string|null $sourceNumber Source number of the message
+     * @param string|null $sourceNumberType Type of source address specified
+     * @param string|null $messageExpiryTimestamp Date time after which the message expires
+     * @param string|null $status The status of the message
+     */
+    public function __construct(
+        ?string $format = null,
+        ?string $content = null,
+        ?array $metadata = null,
+        ?string $messageId = null,
+        ?string $callbackUrl = null,
+        ?bool $deliveryReport = null,
+        ?string $destinationNumber = null,
+        ?string $scheduled = null,
+        ?string $sourceNumber = null,
+        ?string $sourceNumberType = null,
+        ?string $messageExpiryTimestamp = null,
+        ?string $status = null
+    ) {
+        $this->format = $format;
+        $this->content = $content;
+        $this->metadata = $metadata;
+        $this->messageId = $messageId;
+        $this->callbackUrl = $callbackUrl;
+        $this->deliveryReport = $deliveryReport;
+        $this->destinationNumber = $destinationNumber;
+        $this->scheduled = $scheduled;
+        $this->sourceNumber = $sourceNumber;
+        $this->sourceNumberType = $sourceNumberType;
+        $this->messageExpiryTimestamp = $messageExpiryTimestamp;
+        $this->status = $status;
+    }
 }

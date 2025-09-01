@@ -2,23 +2,29 @@
 
 namespace Faldor20\MessagemediaApi\Enum;
 
+use MyCLabs\Enum\Enum;
+
 /**
  * The format of the message.
+ * 
+ * @method static Format SMS()
+ * @method static Format MMS()
+ * @method static Format TTS()
  */
-class Format extends AbstractEnum
+final class Format extends Enum
 {
     /**
      * SMS message.
      */
-    public const SMS = 'SMS';
+    private const SMS = 'SMS';
 
     /**
      * MMS message.
      */
-    public const MMS = 'MMS';
+    private const MMS = 'MMS';
 
     /**
      * Text to speech message.
      */
-    public const TTS = 'TTS';
+    private const TTS = 'TTS';
 }

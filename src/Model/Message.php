@@ -69,4 +69,72 @@ class Message
      * @var string|null The subject field is used to denote subject of the MMS message and has a maximum size of 64 characters long.
      */
     public ?string $subject = null;
+
+    /**
+     * Message constructor.
+     *
+     * @param string|null $content Content of the message
+     * @param string|null $destinationNumber Destination number of the message
+     * @param Format|string|null $format The format of the message (enum instance or string)
+     * @param string|null $sourceNumber Source number of the message
+     * @param string|null $callbackUrl URL replies and delivery reports will be pushed to
+     * @param bool|null $deliveryReport Request a delivery report for this message
+     * @param string|null $scheduled Scheduled delivery date time of the message
+     * @param string|null $messageExpiryTimestamp Date time after which the message expires
+     * @param array|null $metadata Metadata for the message as key value pairs
+     * @param SourceNumberType|string|null $sourceNumberType Type of source address specified (enum instance or string)
+     * @param array|null $media URLs of media files for MMS messages
+     * @param string|null $subject Subject field for MMS messages
+     */
+    public function __construct(
+        ?string $content = null,
+        ?string $destinationNumber = null,
+        $format = null,
+        ?string $sourceNumber = null,
+        ?string $callbackUrl = null,
+        ?bool $deliveryReport = null,
+        ?string $scheduled = null,
+        ?string $messageExpiryTimestamp = null,
+        ?array $metadata = null,
+        $sourceNumberType = null,
+        ?array $media = null,
+        ?string $subject = null
+    ) {
+        $this->content = $content;
+        $this->destinationNumber = $destinationNumber;
+        $this->format = $this->normalizeEnum($format, Format::class);
+        $this->sourceNumber = $sourceNumber;
+        $this->callbackUrl = $callbackUrl;
+        $this->deliveryReport = $deliveryReport;
+        $this->scheduled = $scheduled;
+        $this->messageExpiryTimestamp = $messageExpiryTimestamp;
+        $this->metadata = $metadata;
+        $this->sourceNumberType = $this->normalizeEnum($sourceNumberType, SourceNumberType::class);
+        $this->media = $media;
+        $this->subject = $subject;
+    }
+
+    /**
+     * Normalize enum value - accepts either enum instance or string and returns enum instance
+     *
+     * @param mixed $value
+     * @param string $enumClass
+     * @return mixed|null
+     */
+    private function normalizeEnum($value, string $enumClass)
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        if ($value instanceof $enumClass) {
+            return $value;
+        }
+
+        if (is_string($value)) {
+            return $enumClass::from($value);
+        }
+
+        throw new \InvalidArgumentException("Invalid value for {$enumClass}: " . var_export($value, true));
+    }
 }

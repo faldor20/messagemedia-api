@@ -2,23 +2,29 @@
 
 namespace Faldor20\MessagemediaApi\Enum;
 
+use MyCLabs\Enum\Enum;
+
 /**
  * The classification of a dedicated number.
+ * 
+ * @method static Classification BRONZE()
+ * @method static Classification SILVER()
+ * @method static Classification GOLD()
  */
-class Classification extends AbstractEnum
+final class Classification extends Enum
 {
     /**
      * Bronze classification.
      */
-    public const BRONZE = 'BRONZE';
+    private const BRONZE = 'BRONZE';
 
     /**
      * Silver classification.
      */
-    public const SILVER = 'SILVER';
+    private const SILVER = 'SILVER';
 
     /**
      * Gold classification.
      */
-    public const GOLD = 'GOLD';
+    private const GOLD = 'GOLD';
 }

@@ -2,15 +2,14 @@
 
 namespace Faldor20\MessagemediaApi\Resource;
 
-use Faldor20\MessagemediaApi\Client;
+use Faldor20\MessagemediaApi\Enum\Capability;
+use Faldor20\MessagemediaApi\Enum\Classification;
 use Faldor20\MessagemediaApi\Enum\Type;
 use Faldor20\MessagemediaApi\Enum\Types;
-use Faldor20\MessagemediaApi\Enum\Classification;
-use Faldor20\MessagemediaApi\Enum\Capability;
-use Faldor20\MessagemediaApi\Model\NumbersListResponse;
-use Faldor20\MessagemediaApi\Model\DedicatedNumber;
-
 use Faldor20\MessagemediaApi\Model\Assignment;
+use Faldor20\MessagemediaApi\Model\DedicatedNumber;
+use Faldor20\MessagemediaApi\Model\NumbersListResponse;
+use Faldor20\MessagemediaApi\Client;
 
 /**
  * The Dedicated Numbers API allows you to purchase, provision and configure the dedicated numbers assigned to your Sinch account.
@@ -133,11 +132,10 @@ class DedicatedNumbers
 
         $data = json_decode($response->getBody()->getContents(), true);
 
-        $assignment = new Assignment();
-        $assignment->id = $data['id'] ?? null;
-        $assignment->metadata = $data['metadata'] ?? null;
-        $assignment->numberId = $data['number_id'] ?? null;
-        $assignment->label = $data['label'] ?? null;
+        $assignment = new Assignment($data['id'] ?? null,
+            $data['metadata'] ?? null,
+            $data['number_id'] ?? null,
+            $data['label'] ?? null);
 
         return $assignment;
     }

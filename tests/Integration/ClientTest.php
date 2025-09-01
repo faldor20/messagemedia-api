@@ -2,6 +2,7 @@
 
 namespace Faldor20\MessagemediaApi\Tests\Integration;
 
+use Faldor20\MessagemediaApi\Enum\Format;
 use GuzzleHttp\Client as GuzzleHttpClient;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -37,12 +38,9 @@ class ClientTest extends TestCase
 
         $messagesResource = $client->messages();
 
-        $message = new Message();
-        $message->content = 'Hello World';
-        $message->destinationNumber = '+61491570156';
+        $message = new Message('Hello World', '+61491570156', Format::SMS());
 
-        $sendMessagesRequest = new SendMessagesRequest();
-        $sendMessagesRequest->messages = [$message];
+        $sendMessagesRequest = new SendMessagesRequest([$message]);
 
         $response = $messagesResource->send($sendMessagesRequest);
 

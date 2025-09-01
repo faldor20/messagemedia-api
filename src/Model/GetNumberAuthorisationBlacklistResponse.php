@@ -21,4 +21,18 @@ class GetNumberAuthorisationBlacklistResponse
      * @var array|null The pagination information.
      */
     public ?array $pagination = null;
+
+    /**
+     * GetNumberAuthorisationBlacklistResponse constructor.
+     *
+     * @param string|null $uri URL of the current API call
+     * @param string[] $numbers List of numbers belonging to the blacklist
+     * @param array|null $pagination The pagination information
+     */
+    public function __construct(?string $uri = null, array $numbers = [], ?array $pagination = null)
+    {
+        $this->uri = $uri;
+        $this->numbers = $numbers;
+        $this->pagination = $pagination;
+    }
 }

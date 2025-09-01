@@ -26,4 +26,17 @@ class Assignment
      * @var string|null The label of the assignment.
      */
     public ?string $label = null;
+
+    /**
+     * @param  $id
+     * @param  $metadata
+     * @param  $numberId
+     * @param  $label
+     */
+    public function __construct(?string $id, ?array $metadata, ?string $numberId, ?string $label) {
+    	$this->id = $id;
+    	$this->metadata = $metadata;
+    	$this->numberId = $numberId;
+    	$this->label = $label;
+    }
 }

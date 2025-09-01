@@ -2,23 +2,29 @@
 
 namespace Faldor20\MessagemediaApi\Enum;
 
+use MyCLabs\Enum\Enum;
+
 /**
  * The capability of a dedicated number.
+ * 
+ * @method static Capability SMS()
+ * @method static Capability TTS()
+ * @method static Capability MMS()
  */
-class Capability extends AbstractEnum
+final class Capability extends Enum
 {
     /**
      * SMS capability.
      */
-    public const SMS = 'SMS';
+    private const SMS = 'SMS';
 
     /**
      * TTS capability.
      */
-    public const TTS = 'TTS';
+    private const TTS = 'TTS';
 
     /**
      * MMS capability.
      */
-    public const MMS = 'MMS';
+    private const MMS = 'MMS';
 }

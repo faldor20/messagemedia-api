@@ -2,13 +2,12 @@
 
 namespace Faldor20\MessagemediaApi\Resource;
 
-use Faldor20\MessagemediaApi\Client;
-use Faldor20\MessagemediaApi\Model\GetNumberAuthorisationBlacklistResponse;
-
-use Faldor20\MessagemediaApi\Model\CheckIfOneOrSeveralNumbersAreCurrentlyBlacklistedResponse;
-use Faldor20\MessagemediaApi\Model\Number;
 use Faldor20\MessagemediaApi\Model\AddOneOrMoreNumbersToYourBlacklistRequest;
 use Faldor20\MessagemediaApi\Model\AddOneOrMoreNumbersToYourBlacklistResponse;
+use Faldor20\MessagemediaApi\Model\CheckIfOneOrSeveralNumbersAreCurrentlyBlacklistedResponse;
+use Faldor20\MessagemediaApi\Model\GetNumberAuthorisationBlacklistResponse;
+use Faldor20\MessagemediaApi\Model\Number;
+use Faldor20\MessagemediaApi\Client;
 
 /**
  * The Number Authorisation API allows you to manage your blacklists.
@@ -63,9 +62,7 @@ class NumberAuthorisation
 
         $data = json_decode($response->getBody()->getContents(), true);
 
-        $addOneOrMoreNumbersToYourBlacklistResponse = new AddOneOrMoreNumbersToYourBlacklistResponse();
-        $addOneOrMoreNumbersToYourBlacklistResponse->uri = $data['uri'] ?? null;
-        $addOneOrMoreNumbersToYourBlacklistResponse->numbers = $data['numbers'] ?? [];
+        $addOneOrMoreNumbersToYourBlacklistResponse = new AddOneOrMoreNumbersToYourBlacklistResponse($data['uri'] ?? null, $data['numbers'] ?? []);
 
         return $addOneOrMoreNumbersToYourBlacklistResponse;
     }
@@ -100,16 +97,15 @@ class NumberAuthorisation
         $this->client->assertExpectedResponse($response, [200]);
 
         $data = json_decode($response->getBody()->getContents(), true);
-
-        $checkIfOneOrSeveralNumbersAreCurrentlyBlacklistedResponse = new CheckIfOneOrSeveralNumbersAreCurrentlyBlacklistedResponse();
-        $checkIfOneOrSeveralNumbersAreCurrentlyBlacklistedResponse->uri = $data['uri'] ?? null;
-
+        $numbers = [];
         foreach ($data['numbers'] as $numberData) {
             $number = new Number();
             $number->number = $numberData['number'] ?? null;
             $number->authorised = $numberData['authorised'] ?? null;
-            $checkIfOneOrSeveralNumbersAreCurrentlyBlacklistedResponse->numbers[] = $number;
+            $numbers[] = $number;
         }
+        $checkIfOneOrSeveralNumbersAreCurrentlyBlacklistedResponse =
+            new CheckIfOneOrSeveralNumbersAreCurrentlyBlacklistedResponse($data['uri'] ?? null, $numbers);
 
         return $checkIfOneOrSeveralNumbersAreCurrentlyBlacklistedResponse;
     }
