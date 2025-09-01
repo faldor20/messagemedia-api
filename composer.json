@@ -1,9 +1,9 @@
 {
     "name": "faldor20/messagemedia-api",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "autoload": {
         "psr-4": {
-            "faldor20\\MessagemediaApi\\": "src/"
+            "Faldor20\\MessagemediaApi\\": "src/"
         }
     },
     "license": "MIT",
