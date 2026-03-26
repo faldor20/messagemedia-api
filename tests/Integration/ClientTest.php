@@ -6,6 +6,7 @@ use Faldor20\MessagemediaApi\Enum\Format;
 use GuzzleHttp\Client as GuzzleHttpClient;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use PHPUnit\Framework\TestCase;
@@ -13,6 +14,7 @@ use Faldor20\MessagemediaApi\Authentication\Basic;
 use Faldor20\MessagemediaApi\Client;
 use Faldor20\MessagemediaApi\Model\Message;
 use Faldor20\MessagemediaApi\Model\SendMessagesRequest;
+use Psr\Http\Message\RequestInterface;
 
 class ClientTest extends TestCase
 {
@@ -83,5 +85,103 @@ class ClientTest extends TestCase
         // the dependency discovery mechanism, not the HTTP interaction.
         // In a real application, the HTTP client and factories would be discovered
         // automatically when the request is made.
+    }
+
+    public function testSendMessagesAtApiLimitInSingleRequest()
+    {
+        $history = [];
+        $mock = new MockHandler([
+            new Response(202, [], json_encode([
+                'messages' => array_map(static function (int $index): array {
+                    return [
+                        'message_id' => sprintf('single-batch-%03d', $index),
+                        'status' => 'queued',
+                    ];
+                }, range(0, 99)),
+            ])),
+        ]);
+
+        $handlerStack = HandlerStack::create($mock);
+        $handlerStack->push(Middleware::history($history));
+
+        $httpClient = new GuzzleHttpClient(['handler' => $handlerStack]);
+        $psr17Factory = new Psr17Factory();
+        $authentication = new Basic('YOUR_API_KEY', 'YOUR_API_SECRET');
+        $client = new Client($authentication, $httpClient, $psr17Factory, $psr17Factory);
+
+        $messages = [];
+        foreach (range(0, 99) as $index) {
+            $messages[] = new Message(sprintf('Hello %d', $index), sprintf('+61491570%03d', $index), Format::SMS());
+        }
+
+        $response = $client->messages()->send(new SendMessagesRequest($messages));
+
+        $this->assertCount(100, $response->messages);
+        $this->assertCount(1, $history);
+
+        /** @var RequestInterface $request */
+        $request = $history[0]['request'];
+        $requestBody = json_decode((string) $request->getBody(), true);
+
+        $this->assertCount(100, $requestBody['messages']);
+        $this->assertEquals('Hello 99', $requestBody['messages'][99]['content']);
+    }
+
+    public function testSendMessagesInMultipleBatchesWhenRequestExceedsApiLimit()
+    {
+        $history = [];
+        $mock = new MockHandler([
+            new Response(202, [], json_encode([
+                'messages' => array_map(static function (int $index): array {
+                    return [
+                        'message_id' => sprintf('batch-one-%03d', $index),
+                        'status' => 'queued',
+                    ];
+                }, range(0, 99)),
+            ])),
+            new Response(202, [], json_encode([
+                'messages' => [
+                    [
+                        'message_id' => 'batch-two-100',
+                        'status' => 'queued',
+                    ],
+                ],
+            ])),
+        ]);
+
+        $handlerStack = HandlerStack::create($mock);
+        $handlerStack->push(Middleware::history($history));
+
+        $httpClient = new GuzzleHttpClient(['handler' => $handlerStack]);
+        $psr17Factory = new Psr17Factory();
+        $authentication = new Basic('YOUR_API_KEY', 'YOUR_API_SECRET');
+        $client = new Client($authentication, $httpClient, $psr17Factory, $psr17Factory);
+
+        $messages = [];
+        foreach (range(0, 100) as $index) {
+            $messages[] = new Message(sprintf('Hello %d', $index), sprintf('+61491570%03d', $index), Format::SMS());
+        }
+
+        $response = $client->messages()->send(new SendMessagesRequest($messages));
+
+        $this->assertCount(101, $response->messages);
+        $this->assertEquals('batch-one-000', $response->messages[0]['message_id']);
+        $this->assertEquals('batch-two-100', $response->messages[100]['message_id']);
+
+        $this->assertCount(2, $history);
+
+        /** @var RequestInterface $firstRequest */
+        $firstRequest = $history[0]['request'];
+        /** @var RequestInterface $secondRequest */
+        $secondRequest = $history[1]['request'];
+
+        $firstRequestBody = json_decode((string) $firstRequest->getBody(), true);
+        $secondRequestBody = json_decode((string) $secondRequest->getBody(), true);
+
+        $this->assertCount(100, $firstRequestBody['messages']);
+        $this->assertCount(1, $secondRequestBody['messages']);
+        $this->assertEquals('Hello 0', $firstRequestBody['messages'][0]['content']);
+        $this->assertEquals('Hello 99', $firstRequestBody['messages'][99]['content']);
+        $this->assertEquals('Hello 100', $secondRequestBody['messages'][0]['content']);
     }
 }

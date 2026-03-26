@@ -17,6 +17,8 @@ use Faldor20\MessagemediaApi\Model\SendMessagesResponse;
  */
 class Messages
 {
+    private const MAX_MESSAGES_PER_REQUEST = 99;
+
     private Client $client;
 
     public function __construct(Client $client)
@@ -74,6 +76,7 @@ class Messages
 
     /**
      * Submit one or more (up to 100 per request) SMS, MMS or text to voice messages for delivery.
+     * Requests larger than 100 messages are sent as multiple API calls and combined into one response.
      *
      * @param SendMessagesRequest $messages The messages to send.
      * @return SendMessagesResponse
@@ -84,6 +87,36 @@ class Messages
      */
     public function send(SendMessagesRequest $messages): SendMessagesResponse
     {
+        if (count($messages->messages) <= self::MAX_MESSAGES_PER_REQUEST) {
+            return $this->sendBatch($messages);
+        }
+
+        $responses = [];
+
+        // The upstream API caps each request at 100 messages, so larger payloads
+        // are split transparently and the per-batch responses are merged back.
+        foreach (array_chunk($messages->messages, self::MAX_MESSAGES_PER_REQUEST) as $messageBatch) {
+            $responses[] = $this->sendBatch(new SendMessagesRequest($messageBatch));
+        }
+
+        return new SendMessagesResponse(array_merge(...array_map(
+            static function (SendMessagesResponse $response): array {
+                return $response->messages;
+            },
+            $responses
+        )));
+    }
+
+    /**
+     * Send a single API-compliant batch of messages.
+     *
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     * @throws \Faldor20\MessagemediaApi\Exception\BadRequestException
+     * @throws \Faldor20\MessagemediaApi\Exception\ForbiddenException
+     * @throws \Faldor20\MessagemediaApi\Exception\UnexpectedStatusCodeException
+     */
+    private function sendBatch(SendMessagesRequest $messages): SendMessagesResponse
+    {
         $request = $this->client->getRequestFactory()->createRequest('POST', '/v1/messages');
         $json = $this->client->getSerializer()->serialize($messages, 'json');
         $request = $request
@@ -93,12 +126,10 @@ class Messages
         $response = $this->client->sendRequest($request);
         $this->client->assertExpectedResponse($response, [202], [400, 403]);
 
-        $sendMessagesResponse = $this->client->getSerializer()->deserialize(
+        return $this->client->getSerializer()->deserialize(
             $response->getBody()->getContents(),
             SendMessagesResponse::class,
             'json'
         );
-
-        return $sendMessagesResponse;
     }
 }
